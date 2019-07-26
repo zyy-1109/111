@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+
+    <script src="jquery.js"></script>
+
+
+
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        user-select: none;
+        list-style: none;
+    }
+
+    .fl {
+        float: left;
+    }
+
+    .fr {
+        float: right;
+    }
+
+    .content {
+        width: 500px;
+        height: auto;
+        color: green;
+        min-height: 600px;
+        box-shadow: 10px 10px 10px 10px #ccc;
+        background: url('https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1295555649,4023503656&fm=26&gp=0.jpg');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        padding: 20px;
+        font-size: 30px;
+        border-radius: 20px;
+        margin: 100px auto;
+    }
+
+    .note {
+        width: 100%;
+        height: 60px;
+        line-height: 60px;
+        border-radius: 10px;
+        text-align: center;
+        background: rgba(0, 0, 0, .3);
+    }
+
+    .additem input {
+        width: 70%;
+        height: 40px;
+        outline: none;
+        font-size: 20px;
+        border-radius: 20px;
+        border: 1px solid #ccc;
+        text-indent: 2rem;
+    }
+
+    .additem button {
+        display: inline-block;
+        font-size: 20px;
+        width: 20%;
+        height: 50px;
+        border-radius: 20px;
+        outline: none;
+        font-size: 16px;
+        margin-left: 20px;
+        background: rgb(0, 0, 0, .2);
+    }
+
+    .middle {
+        width: 500px;
+        height: auto;
+        margin: 0 auto;
+        margin-left: -10px;
+        border-bottom: 6px dotted yellowgreen;
+        font-size: 16px;
+    }
+
+    .bottom {
+        width: 500px;
+        height: auto;
+        margin: 0 auto;
+        margin-left: -10px;
+        margin-top: 50px;
+        border-bottom: 6px dotted yellowgreen;
+        font-size: 16px;
+    }
+
+    .huifu {
+        width: 500px;
+        height: auto;
+        margin: 0 auto;
+        margin-top: 50px;
+        border-bottom: 6px dotted yellowgreen;
+    }
+
+    .huifu ul li {
+        text-decoration: line-through;
+    }
+
+    #ulMiddle li {
+        display: block;
+        height: 30px;
+        line-height: 50px;
+        padding-left: 20px;
+    }
+
+    #ulMiddle li p {
+        line-height: 50px;
+        float: left;
+    }
+
+    #ulMiddle li button {
+        float: right;
+        line-height: 40px;
+    }
+
+    #ulBottom li {
+        line-height: 50px;
+    }
+
+    #ulBottom li p {
+        line-height: 50px;
+        float: left;
+    }
+
+    #ulBottom li button {
+        float: right;
+        line-height: 40px;
+    }
+
+    .addDiv {
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        background: cyan;
+        padding-left: 20px;
+        box-sizing: border-box;
+
+    }
+
+    .show-enter-active,
+    .show-leave-active {
+        transition: all 2s;
+    }
+
+    .show-enter,
+    .show-leave-to {
+        margin-left: 100px;
+    }
+
+    .show-enter-to,
+    .show-leave {
+        margin-left: 0px;
+    }
+</style>
+
+<body>
+    <div class="content" id="app">
+        <div class="note">
+            <span>记事本</span>
+            <span class="glyphicon glyphicon-menu-hamburger fr" style="margin-right: 10px;margin-top:10px;"></span>
+        </div>
+        <div class="additem">
+            <input type="text" v-model="something" placeholder="记录一下你的心情吧">
+            <button class="glyphicon glyphicon-tag" v-on:click="add" @click="toggle">提交</button>
+        </div>
+        <!-- 代办事件 -->
+        <div class="middle">
+            <h3>代办事件</h3>
+            <ul id="ulMiddle" style="line-height: 50px;">
+                <li v-if="!list.length">还未添加事项</li>
+                <li v-for="(item,index) in list" :key="index+item" v-else>
+                    <input type="checkbox" @change="inputChecked(item,index)">
+                    {{item}}
+                    <span v-show="isshow" @click="done(item,index)" class="glyphicon glyphicon-ok show fr"
+                        style="vertical-align: middle;padding-right: 20px;padding-top: 10px;"></span>
+                    <span v-show="isshow" v-on:click="del(item,index)" class="fr glyphicon glyphicon-remove show"
+                        style="line-height:30px;padding-right: 20px;vertical-align: middle;"></span>
+                </li>
+            </ul>
+        </div>
+        <!-- 完成事件 -->
+        <div class="bottom">
+            <h3>完成事件</h3>
+            <ul id="ulBottom">
+                <li v-for="(item,index) in doneList"
+                    style="vertical-align: middle;padding-right: 20px;padding-top: 10px;padding-left: 20px;">
+                    <input checked="true" id="wanchengipt" type="checkbox" @change="wanchengToDaiban(item,index)">
+                    {{item}}
+                    <span v-show="isshow" @click="back(item,index)" class="fr glyphicon glyphicon-triangle-top show"
+                        style="line-height:30px;padding-right: 20px;vertical-align: middle;"></span>
+                </li>
+            </ul>
+        </div>
+        <!-- 恢复 -->
+        <div class="huifu">
+            <h3>恢复</h3>
+            <ul>
+                <li style="vertical-align: middle;padding-right: 20px;padding-top: 10px;padding-left: 20px;" v-for="(item,index) in huif" :key="index">
+                    <input type="checkbox">
+                    {{item}}
+                    <span v-show="isshow" @click="huifu(item,index)" class="fr glyphicon glyphicon-triangle-top show"
+                        style="line-height:30px;padding-right: 20px;vertical-align: middle;"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data() {
+            return {
+                something: '',//存放input的数据
+                list: [],//存放待办事件
+                doneList: [],//存放完成事件
+                huif: [],//回去到代办事件
+                isshow: false,//显示隐藏
+                ischecked: true,//复选框被选中的状态
+            }
+        },
+        methods: {
+            // 添加
+            add() {
+                this.list.push(this.something);
+                this.something = '';
+            },
+            // 完成
+            done(item, index) {
+                this.list.splice(index, 1);
+                this.doneList.push(item);
+            },
+            // 删除
+            del(item, index) {
+                this.list.splice(index, 1);
+                this.huif.push(item)
+            },
+            // 回去到待办事件
+            back(item, index) {
+                this.doneList.splice(index, 1);
+                this.list.push(item);
+            },
+            // 恢复
+            huifu(item, index) {
+                this.huif.splice(index, 1);
+                this.list.push(item);
+            },
+            // 被选中的状态
+            inputChecked(item, index) {
+                if (this.ischecked = true) {
+                    console.log(this.ischecked)
+                    // console.log(123);
+                    this.list.splice(index, 1);
+                    this.doneList.push(item);
+                }
+            },
+            // 完成回到代办
+            wanchengToDaiban(item, index) {
+                console.log(1)
+                // this.ischecked = !this.ischecked;
+                // if (this.ischecked == false) {
+                    this.doneList.splice(index, 1);
+                    this.list.push(item);
+                // }
+
+            },
+            toggle: function () {
+                this.opacity = 0.5;
+                this.transition = '2s';
+            }
+        }
+    })
+
+</script>
+
+</html>
