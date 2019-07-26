@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        [v-cloak] {
+            display: none
+        }
+    </style>
+</head>
+
+<body>
+    <div style="width: 400px;height:600px;margin: 0 auto" id="box" v-cloak>
+        <div style="width: 100%;height:50px;background-color:rgb(51, 48, 224);text-align: center">
+            <span style="line-height: 50px;font-weight: bold;font-size: 26px;color: #fff">记事本</span>
+        </div>
+        <div style="margin-top:20px;margin-bottom:20px">
+            <input type="text" style="width: 80%;" v-model="sousuo"><button style="margin-left:30px"
+                @click="tijiao">提交</button>
+        </div>
+        <div style="width: 100%;height:35px;background-color:rgb(51, 48, 224);">
+            <span style="line-height: 35px;color:#fff;padding-left: 15px;">未完成</span>
+        </div>
+        <ul>
+            <li v-for="(i,index) in warr" :key="index+new Date()" style="height: 30px;line-height: 30px;">
+                <input type="checkbox" style="margin-right: 10px" @change="gou(i,index)"> {{i}} <button style="float: right;margin-top:5px;"
+                    @click="deletee(i,index)">取消</button>
+            </li>
+            <!-- i 是每一个li的内容  index是下标-->
+
+        </ul>
+        <div style="width: 100%;height:35px;background-color:rgb(51, 48, 224);margin-top: 2px;">
+            <span style="line-height: 35px;color:#fff;padding-left: 15px;">已完成</span>
+        </div>
+        <div>
+            <ul>
+                <li v-for="(i,index) in yarr">
+                    <input type="checkbox" checked="checked" style="margin-right: 10px" @change="gou(i,index)">{{i}}</li>
+                    <!-- checked="checked" 点击的时候画狗子 -->
+            </ul>
+        </div>
+        <div style="width: 100%;height:35px;background-color:rgb(51, 48, 224);margin-top: 2px;">
+            <span style="line-height: 35px;color:#fff;padding-left: 15px;">已取消</span>
+        </div>
+        <div>
+            <ul>
+                <li v-for="(i,index) in qarr" :key="index+new Date()"  style="height: 30px;line-height: 30px;">
+                    {{i}}<button style="float: right;margin-top:5px;"
+                    @click="huifu(i,index)">恢复</button></li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script src="vue.js"></script>
+<script src="vue-resource.js"></script>
+<script>
+    new Vue({
+        el: '#box',
+        data: {
+            sousuo: '',
+            warr: [],//是未完成的数组
+            yarr: [],//是已完成的数组
+            qarr: []//取消的数组
+        },
+        methods: {
+            tijiao() {
+                if (this.sousuo == '') {
+                    alert('请输入内容')
+                } else {
+                    this.warr.push(this.sousuo)
+                }
+            },
+            deletee(i,index) {
+                this.warr.splice(index,1)
+                this.qarr.unshift(i)
+            },
+            huifu(i,index){
+                this.qarr.splice(index,1)
+                this.warr.push(i)
+            },
+            gou(i,index){
+                this.warr.splice(index,1)
+                this.yarr.push(i)
+            }
+        }
+
+    })
+</script>
+
+</html>
