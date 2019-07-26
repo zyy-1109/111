@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .header {
+            width: 100%;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+            font-size: 30px;
+            color: #fff;
+            background-color: darkcyan;
+        }
+
+        .search {
+            width: 100%;
+            ;
+            height: 180px;
+            line-height: 180px;
+            padding: 0 200px;
+            box-sizing: border-box;
+        }
+
+        .search>input {
+            width: 800px;
+            height: 60px;
+            font-size: 26px;
+            text-indent: 40px;
+            color: darkorange;
+        }
+
+        .search>button {
+            width: 120px;
+            height: 60px;
+            border: none;
+            outline: none;
+            margin-left: 20px;
+            background: darkcyan;
+            color: #fff;
+        }
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box" v-cloak>
+        <div class="header">
+            <h2>记事本</h2>
+        </div>
+        <div class="search">
+            <input type="text" v-model="ipt">
+            <button @click='yx_q'>录入</button>
+        </div>
+        <div class="min">
+            <div>
+                <h4
+                    style="height: 40px;background-color: darkcyan;border: 1px solid #000;line-height: 40px;text-indent: 80px;color: #fff;">
+                    预建</h4>
+                <div>
+                    <p v-for="i,index in yx" :key='index+i'
+                        style="height: 40px;border: 1px solid #000;line-height: 40px;text-indent: 80px;">
+                        <input @change="xz_q($event,index)" type="checkbox"> {{i}} <button
+                            @click='rms(index)'>删除</button>
+                    </p>
+                </div>
+            </div>
+            <div>
+                <h4
+                    style="height: 40px;background-color: darkcyan;border: 1px solid #000;line-height: 40px;text-indent: 80px;color: #fff;">
+                    完成</h4>
+                <div>
+                    <p v-for="i,index in xz" :key='index+i'
+                        style="height: 40px;border: 1px solid #000;line-height: 40px;text-indent: 80px;">
+                        <input @change="xz_q($event,index)" checked='true' type="checkbox"> {{i}}
+                    </p>
+                </div>
+            </div>
+            <div>
+                <h4
+                    style="height: 40px;background-color: darkcyan;border: 1px solid #000;line-height: 40px;text-indent: 80px;color: #fff;">
+                    已删除</h4>
+                <div>
+                        <p v-for="i,index in sc" :key='index+i'
+                        style="height: 40px;border: 1px solid #000;line-height: 40px;text-indent: 80px;">
+                       {{i}} <button @click="createds(index)">恢复</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="vue.js"></script>
+<script>
+
+    new Vue({
+        el: '#box',
+        data: {
+            yx: [],
+            xz: [],
+            sc: [],
+            ipt: ''
+        },
+        created() {
+            if (localStorage.yx) {
+                this.yx = localStorage.yx.split(',')
+            }
+            if (localStorage.xz) {
+                this.xz = localStorage.xz.split(',')
+            }
+            if (localStorage.sc) {
+                this.sc = localStorage.sc.split(',')
+            }
+        },
+        methods: {
+            yx_q() {
+                if (this.yx.length) {
+                    for (var i = 0; i < this.yx.length; i++) {
+                        if (this.yx[i] == this.ipt) {
+                            alert('已拥有')
+                            return
+                        } else {
+                            this.yx.unshift(this.ipt)
+                            localStorage.yx = this.yx
+                            return
+                        }
+                    }
+                } else {
+                    this.yx.unshift(this.ipt)
+                    localStorage.yx = this.yx
+                }
+            },
+            xz_q(e, i) {
+                if (e.path[0].checked) {
+                    var a = this.yx.splice(i, 1)
+                    this.xz.unshift(a[0])
+                    localStorage.xz = this.xz
+                    localStorage.yx = this.yx
+                } else {
+                    var a = this.xz.splice(i, 1)
+                    this.yx.unshift(a[0])
+                    localStorage.xz = this.xz
+                    localStorage.yx = this.yx
+                }
+            },
+            rms(i) {
+                var a = this.yx.splice(i,1)
+                this.sc.unshift(a[0])
+                localStorage.yx = this.yx
+                localStorage.sc = this.sc
+            },
+            createds(i) {
+                var a = this.sc.splice(i,1)
+                this.yx.unshift(a[0])
+                localStorage.yx = this.yx
+                localStorage.sc = this.sc
+            },
+        }
+    })
+
+
+</script>
+
+</html>
