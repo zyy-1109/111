@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div style="width:100%; height: 90px; line-height: 90px;text-align: center;color: #fff;background-color: #000;font-size: 25px;;">记事本</div>
+        <div style="height: 120px; line-height: 120px; text-align: center;">
+            <input type="text" style="width:50%;height: 56px;" v-model="neirong"><button style="width:100px;height:60px;background-color: cadetblue; color: #fff;margin-left: 10px;" @click="tijiao">提交</button></div>
+        <div style="width:100%;height: auto;background-color: cadetblue;border-bottom: 1px #ccc solid; line-height: 60px;">未完成
+            <div>
+                <p v-for="i,index in wch" :key='index+i' style="height: 50px;border: 1px solid #ccc;line-height: 50px;text-indent: 20px;">
+                    <input @change="yicheng($event,index)" type="checkbox"> {{i}} <button @click='rms(index)' style="float: right; line-height: 46px;">删除</button>
+                </p>
+            </div>
+        </div>
+        <div style=" width:100%;height: auto;background-color: cadetblue;border-bottom: 1px #ccc solid;line-height: 60px; ">已完成
+            <div>
+                <p v-for="i,index in ycf" :key='index+i' style="height: 50px;border: 1px solid #ccc;line-height: 50px;text-indent: 20px;">
+                    <input @change="yicheng($event,index)" checked='true' type="checkbox"> {{i}}
+                </p>
+            </div>
+        </div>
+        <div style="width:100%;height: auto;background-color: cadetblue;border-bottom: 1px #ccc solid;line-height: 60px; ">已取消
+            <div>
+                <p v-for="i,index in sc" :key='index+i' style="height: 50px;border: 1px solid #ccc;line-height: 50px;text-indent: 20px;">
+                    <input @change="yicheng($event,index)" type="checkbox"> {{i}} <button @click="createds(index)" style="float: right; line-height: 46px;">恢复</button>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="./vue.js "></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            wch: [],
+            ycf: [],
+            sc: [],
+            neirong: '',
+        },
+        created() {
+            if (localStorage.wch) {
+                this.wch = localStorage.wch.split(',')
+            }
+            if (localStorage.ycf) {
+                this.ycf = localStorage.ycf.split(',')
+            }
+            if (localStorage.sc) {
+                this.sc = localStorage.sc.split(',')
+            }
+        },
+        methods: {
+            tijiao() {
+                if (this.wch.length) {
+                    for (var i = 0; i < this.wch.length; i++) {
+                        if (this.wch[i] == this.neirong) {
+                            alert('已拥有')
+                            return
+                        } else {
+                            this.wch.unshift(this.neirong)
+                            localStorage.wch = this.wch
+                            return
+                        }
+                    }
+                } else {
+                    this.wch.unshift(this.neirong)
+                    localStorage.wch = this.wch
+                }
+            },
+            yicheng(e, i) {
+                if (e.path[0].checked) {
+                    var a = this.wch.splice(i, 1)
+                    this.ycf.unshift(a[0])
+                    localStorage.ycf = this.ycf
+                    localStorage.wch = this.wch
+
+                } else {
+                    var a = this.ycf.splice(i, 1)
+                    this.wch.unshift(a[0])
+                    localStorage.ycf = this.ycf
+                    localStorage.wch = this.wch
+                }
+            },
+            rms(i) {
+                var a = this.wch.splice(i, 1)
+                this.sc.unshift(a[0])
+                localStorage.wch = this.wch
+                localStorage.sc = this.sc
+            },
+            createds(i) {
+                var a = this.sc.splice(i, 1)
+                this.wch.unshift(a[0])
+                localStorage.wch = this.wch
+                localStorage.sc = this.sc
+            },
+        }
+    })
+</script>
+
+</html>
