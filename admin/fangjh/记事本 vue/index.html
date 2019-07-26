@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>记事本</title>
+		<link rel="stylesheet" type="text/css" href="css/style.css"/>
+		<style type="text/css">
+			*{
+				list-style: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box" v-cloak>
+			
+			<div class="container">
+				<div class="header">记事本</div>
+				<div class="create">
+					<input type="text" placeholder="待办事项" v-model="txt" id="input"/>
+					<button id="check" @click="sub">提交</button>
+				</div>
+				
+				<div id="on1">
+					<h3>未完成</h3>
+					<ul>
+						<li v-for="(i,$index) in wait" :key='$index + i'>
+							<input type="checkbox" @change="com($index)" />
+							{{i}}<button @click="quxiao($index)">取消</button>
+						</li>
+					</ul>
+				</div>
+				<div id="on2">
+					<h3>已完成</h3>
+					<ul>
+						<li v-for="(i,$index) in complete" :key='$index + i'>
+							<input type="checkbox" checked  @change="wei($index)"/>
+							{{i}}
+							<span>{{n}}-{{y}}-{{r}}</span>
+						</li>
+					</ul>
+				</div>
+				<div id="on3">
+					<h3>已取消</h3>
+					<ul>
+						<li v-for="(i,$index) in cancle" :key='$index+i'>
+							{{i}}
+							<button @click="hui($index)">恢复</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="vue.js"></script>
+	<script type="text/javascript">
+	
+		new Vue({
+			el:'#box',
+			data:{
+				wait:[],
+				complete:[],
+				cancle:[],
+				txt:'',
+				tid:true,
+				n:'',
+				y:'',
+				r:''
+			},
+			methods:{
+				sub(){
+					if (this.txt=='') {
+						alert('待办事项不能为空')
+					}else{
+						this.wait.push(this.txt)
+						localStorage.wait=this.wait
+						this.txt=''
+					}
+					
+				},
+				//未完成里的取消
+				quxiao(index){
+					this.cancle.push(this.wait.splice(index,1)[0])  
+					localStorage.wait=this.wait
+					localStorage.cancle=this.cancle
+				},
+				//未完成变成已完成
+				com(index){
+					this.complete.push(this.wait.splice(index,1)[0])
+					localStorage.wait=this.wait
+					localStorage.complete=this.complete
+					
+					var d=new Date()
+					this.n=d.getFullYear()
+					this.y=d.getMonth()+1
+					this.r=d.getDate()
+					
+					
+				},
+				//已完成变成未完成
+				wei(index){
+					this.wait.push(this.complete.splice(index,1)[0])
+					localStorage.complete=this.complete
+					localStorage.wait=this.wait
+				},
+				//已完成里的取消
+				can(index){
+					this.cancle.push(this.complete.splice(index,1)[0])
+					localStorage.complete=this.complete
+					localStorage.cancle=this.cancle
+				},
+				//取消里的恢复
+				hui(index){
+					this.wait.push(this.cancle.splice(index,1)[0])
+					localStorage.wait=this.wait
+					localStorage.cancle=this.cancle
+				}
+				
+			},
+			created(){
+				if (localStorage.wait) {
+					this.wait=localStorage.wait.split(',')
+				}
+				if (localStorage.complete) {
+					this.complete=localStorage.complete.split(',')
+				}
+				if (localStorage.cancle) {
+					this.cancle=localStorage.cancle.split(',')
+				}
+			}
+		})
+	</script>
+</html>
