@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="style.css" />
+		<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+		<script src="jquery.js"></script>
+		<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	</head>
+
+	<body>
+		<div id="box">
+
+			<div class="box">
+
+				<div class="nav">
+					记事本
+					<i id="glyphicon glyphicon-align-justify"></i>
+				</div>
+
+				<div class="cont">
+					<div style="height: 50px;line-height: 50px;">
+						<input type="text" placeholder="请输入" style="width: 300px;height:30px;margin-left: 10px;color: #000000;" v-model="sou">
+
+						<button type="submit" @click="add" style="width:50px;height:30px;color: #000000;font-size: 15px;line-height: 30px;">添加</button>
+					</div>
+
+					<div class="wei">
+						<div class="b">未提交</div>
+						<ul>
+							<li v-for="(i,index) in weiarr" style="height: 40px;padding-left: 20px;">
+								<input type="checkbox" style="width: 20px;height: 20px;" @change="yibtn(index)"/><span style="color: #000000;">{{i}}</span>
+								<button @click="remove(index)">删除</button>
+							</li>
+						</ul>
+
+					</div>
+					<div class="yi">
+						<div class="b">已提交</div>
+						<ul>
+							<li v-for="(i,index) in yiarr" style="height: 40px;padding-left: 20px;">
+								<input type="checkbox" style="width: 20px;height: 20px;" checked="checked"/>
+								<span style="color: #000000;">{{i}}</span>
+							</li>
+						</ul>
+
+					</div>
+					<div class="qu">
+						<div class="b">已取消</div>
+						<ul>
+							<li v-for="(i,index) in quarr" style="height: 40px;padding-left: 20px;">
+								<span style="color: #000000;">{{i}}</span>
+								<button @click="huifu(index)">恢复</button>
+							</li>
+						</ul>
+
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+	</body>
+
+	<script src="vue.js"></script>
+	<script>
+		new Vue({
+			el: '#box',
+			data: {
+				sou: '',
+				weiarr: [],
+				yiarr: [],
+				quarr: []
+
+			},
+			methods: {
+				add() {
+					if(this.sou == '') {
+						alert('11')
+					} else {
+						this.weiarr.push(this.sou)
+					}
+				},
+				remove(index){
+					
+					var val= this.weiarr.splice(index,1)
+					this.quarr.push(val[0])
+				},
+				huifu(index){
+					var val= this.quarr.splice(index,1)
+					this.weiarr.push(val[0])
+				},
+				yibtn(index){
+					var val= this.weiarr.splice(index,1)
+					this.yiarr.push(val[0])
+				}
+				
+				
+				
+				
+				
+
+			}
+		})
+	</script>
+
+</html>
