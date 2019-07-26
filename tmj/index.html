@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>记事本</title>
+		<style type="text/css">
+			[v-cloak] {
+				display: none;
+			}
+			
+			.wc {
+				width: 100%;
+				background: greenyellow;
+				color: red;
+				line-height: 30px;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="box" v-cloak>
+			<div style="width: 500px;min-height: 500px;margin:0 auto; background: #fff">
+				<div>
+					<input type="text" placeholder="代办事项" v-model="text">
+					<button @click="weiy">提交</button>
+				</div>
+				<div>
+					<p class="wc">未完成</p>
+					<div v-for="(i,$index) in weiwan">
+						<p><input type="checkbox" @click="gou($index)" v-bind:key="i">{{i}}<button style="float: right;" @click="shanchu($index)">＞</button></p>
+					</div>
+				</div>
+				<div>
+					<p class="wc">已完成</p>
+					<div v-for="(i,$index) in yiwan" style="background-color: #fff;line-height: 30px;">
+						<p><input type="checkbox" checked="checked" @click="huigou($index)" v-bind:key="i">{{i}} </p>
+					</div>
+				</div>
+				<div>
+					<p class="wc">已取消</p>
+					<div v-for="(j,$index) in quxiao">
+						<p style="text-decoration: line-through;">{{j}}<button @click="hui($index)" style="float: right;">回复数据 </button></p>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</body>
+	<script type="text/javascript" src="vue.js"></script>
+	<script type="text/javascript">
+		new Vue({
+			el: '#box',
+			data: {
+				text: '',
+				yiwan: [],
+				weiwan: [],
+				quxiao: []
+			},
+			methods: {
+				weiy(index) {
+					this.weiwan.push(this.text)
+
+				},
+				gou(index) {
+					this.yiwan.push(this.weiwan[index])
+					this.weiwan.splice(index, 1)
+				},
+				huigou(index) {
+					this.weiwan.push(this.yiwan[index])
+					this.yiwan.splice(index, 1)
+				},
+				shanchu(index) {
+					this.quxiao.push(this.weiwan[index])
+					this.weiwan.splice(index, 1)
+					console.log(this.quxiao)
+
+				},
+				hui(index) {
+					this.yiwan.push(this.quxiao[index])
+					this.quxiao.splice(index, 1)
+				}
+			},
+		})
+	</script>
+
+</html>
