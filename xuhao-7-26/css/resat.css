@@ -1,0 +1,29 @@
+* {
+	padding:0;
+	margin: 0;
+	list-style: none;
+}
+
+a { 
+	text-decoration: none;
+ }
+
+i {
+	font-style: normal;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-weight: normal;
+}
+
+img {
+	vertical-align: top;
+}
+
+.clearfix:before, .clearfix:after {
+	content: '';
+	display: table;
+}
+.clearfix:after {
+	clear: both;
+}
