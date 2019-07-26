@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .bigbox {
+            width: 600px;
+            height: 650px;
+            margin: auto;
+            border: solid cornflowerblue 1px;
+        }
+
+        .a {
+            height: 40px;
+            line-height: 40px;
+            border-bottom: solid #fff 1px;
+            background: cornflowerblue;
+            color: #fff;
+        }
+
+        .ywc {
+            width: 600px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+        <div class="bigbox">
+            <div class="title" style="height:60px;background:cornflowerblue;">
+                <h3 style="color:#fff;font-size:20px;text-align: center;line-height:60px;">记事本</h3>
+            </div>
+
+            <div class="content">
+                <div class="item">
+                    <input type="text" style="width:510px;height:30px;margin:20px 0;" placeholder="请输入"
+                        v-model="tianjia">
+
+                    <button
+                        style="width:70px;height:30px;border-radius:6px;background:cornflowerblue;outline:none;border:none; color:#fff;"
+                        @click="add">提交</button>
+                </div>
+                <!-- 未完成 -->
+                <div class="ywc">
+                    <h3 class="a">未完成</h3>
+                    <ul class="item" >
+                        <li style="line-height:40px;border-bottom:solid cornflowerblue 1px;"
+                            v-for="(item, index) in list">
+                            <input type="checkbox" @change="clickMe" v-model="ckeckVal" />
+                            {{item}}
+                            <button style="float: right;" @click="finish(item,index)">取消</button>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 已完成 -->
+                <div class="wwc">
+                    <h3 class="a">已完成</h3>
+                    <ul>
+
+                        <li v-for="(item, index) in fd">
+                            <!-- <input type="checkbox" /> -->
+
+                        </li>
+                    </ul>
+
+                </div>
+                <!--  -->
+                <div class="yqx">
+                    <h3 class="a">已取消</h3>
+                    <ul>
+                        <li v-for="(item, index) in finishlist">
+                            <s>
+                                {{item}}
+                            </s>
+                            <button style="float: right;" @click="huifu(item,index)">恢复</button>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+</body>
+<script type="text/javascript" src="vue.js"></script>
+<script type="text/javascript" src="vue-resource.js"></script>
+<script>
+    new Vue({
+        el: "#box",
+        data: {
+            tianjia: '',
+            list: [],
+            finishlist: [],
+            fs: [],
+            ckeckVal:false,
+            ckeckClass:'',
+            ckeckInfo:'复选框没有被选中',
+            fd:[]
+
+        },
+        methods: {
+            add() {
+                if (this.tianjia == '') {
+                    alert('请输入添加事项')
+                } else {
+                    this.list.push(this.tianjia)
+                    this.tianjia = ''
+
+                }
+            },
+            finish(item, index) {
+                this.list.splice(index, 1)
+                this.finishlist.push(item)
+            },
+            huifu(item, index) {
+                this.finishlist.splice(index, 1)
+                this.list.push(item)
+                // console.log(this.fs)
+            },
+            clickMe(item,index) {
+                var that = this;
+                if (that.ckeckVal) {
+                   alert('复选框被选中了');
+                   that.list.splice(index, 1)
+                    that.fd.push(item)
+                    console.log(that.fd)
+                  
+                } 
+            }
+
+        },
+
+
+
+
+    })
+
+
+
+
+</script>
+
+</html>
