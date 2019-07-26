@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{padding: 0;margin: 0;list-style: none;}
+		[ v-cloak]{
+			display: none;
+		}
+		.head{
+			height: 80px;
+			font-size: 30px;
+			line-height: 80px;
+			background-color: lightblue;
+			color: white;
+			font-weight: bold;
+			user-select: none;
+		}
+		.head p{
+			text-align: center;
+		}
+		.push{
+			height: 60px;
+			padding-top: 20px;
+		}
+		.append{
+			width: 600px;
+			height: 40px;
+			margin: 0 auto;
+			font-size: 20px;
+			float: left;
+			display: block;
+
+		}
+		.push button{
+			width: 60px;
+			height: 44px;
+			margin-left: 20px;
+			cursor: pointer;
+			background-color: lightblue;
+			outline: none;
+			border:none;
+			border-radius: 5px;
+		}
+		.header{
+			height:50px;
+			background-color: lightblue;
+			color: #fff;
+			padding-left: 20px;
+			line-height:50px;
+			user-select: none;
+		}
+		.things{
+			height: 50px;
+			padding-left: 15px;
+			line-height: 50px;
+		}
+	</style>
+	<link rel="stylesheet" href="font/iconfont.css">
+	<script src="font/iconfont.js"></script>
+</head>
+<body>
+<div id="box" v-cloak>
+	<!-- 头部 -->
+	<div class="head">
+		<p>记事本</p>
+	</div>
+	<!-- 内容 -->
+	<div class="content">
+		<div class="push">
+			<input type="text" placeholder="输入事情" class="append" @keyup.enter="app" v-model="text">
+			<button @click="app">添加</button>
+		</div>
+		<!-- 未完成 -->
+		<div class="no">
+			<div class="header" @click="mybox1 = !mybox1"><span>未完成</span><i class="iconfont" style="float: right;margin-right: 30px;">{{mybox1==true?'&#xe60c;':'&#xe662;'}}</i></div>
+			<div v-for="(i,$index) in no_list" class="things" v-show="mybox1">
+				<input type="checkbox" @change="d_no($index)" :key="m++"><span>{{i}}</span><button style="float: right;margin-right: 30px;margin-top: 12px;" @click="rp($index)">取消</button>
+			</div>
+		</div>
+		<!-- 已完成 -->
+		<div class="yes">
+			<div class="header" @click="mybox2 = !mybox2"><span>已完成</span><i class="iconfont" style="float: right;margin-right: 30px;">{{mybox2==true?'&#xe60c;':'&#xe662;'}}</i></div>
+			<div v-for="(i,$index) in yes_list" class="things" v-show="mybox2">
+				<input type="checkbox" checked="checked" @change="d_yes($index)" :key="n++"><span>{{i}}</span>
+			</div>
+		</div>
+		<!-- 已取消 -->
+		<div class="delete">
+			<div class="header" @click="mybox3 = !mybox3"><span>已取消</span><i class="iconfont" style="float: right;margin-right: 30px;">{{mybox3==true?'&#xe60c;':'&#xe662;'}}</i></div>
+			<div v-for="(i,$index) in delete_list" class="things" v-show="mybox3">
+				<span>{{i}}</span><button style="float: right;margin-right: 30px;margin-top: 12px;" @click="rt($index)">恢复</button>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+<script src="vue.js"></script>
+<script>
+	new Vue({
+		el:'#box',
+		data:{
+			no_list:[],
+			yes_list:[],
+			delete_list:[],
+			text:'',
+			n:1,
+			m:1,
+			mybox1:true,
+			mybox2:true,
+			mybox3:true,
+		},
+		methods:{
+			app(){
+				this.no_list.push(this.text);
+				this.text = '';
+			},
+			d_no(b){
+				this.yes_list.push(this.no_list[b])
+				this.no_list.splice(b,1)
+				var d1 = new Date();
+
+			},
+			d_yes(a){
+				this.no_list.push(this.yes_list[a])
+				this.yes_list.splice(a,1)
+			},
+			rp(c){
+				this.delete_list.push(this.no_list[c])
+				this.no_list.splice(c,1)
+			},
+			rt(d){
+				this.no_list.push(this.delete_list[d])
+				this.delete_list.splice(d,1)
+			}
+		},
+		watch:{
+			yes_list(a,b){
+
+			},
+			no_list(a,b){
+
+			},
+			delete_list(a,b){
+
+			}
+		}
+	})
+</script>
+</html>
