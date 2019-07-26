@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			#box {
+				width: 500px;
+				height: auto;
+				margin: 0 auto;
+			}
+			
+			button {
+				width: 80px;
+				height: 35px;
+				float: left;
+				margin-left: 20px;
+				background: #5BC0DE;
+				border: none;
+			}
+			
+			#wwc {
+				width: 500px;
+				height: auto;
+				float: left;
+				margin-top: 20px;
+			}
+			
+			#ywc {
+				width: 500px;
+				height: auto;
+				float: left;
+				margin-top: 20px;
+			}
+			
+			#yqx {
+				width: 500px;
+				height: auto;
+				float: left;
+				margin-top: 20px;
+			}
+			
+			span {
+				float: right;
+				width: 50px;
+				height: 20px;
+				border: 1px solid #ccc;
+				border-radius: 20px 20px;
+				text-align: center;
+				line-height: 20px;
+			}
+			
+			[c-cloak] {
+				display: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box" v-cloak>
+			<div style="width:500px;height;200px;background:#5BC0DE;font-size: 30px;color: #fff; text-align: center;">记事本</div>
+			<div style="float: left;margin-top: 20px;">
+				<input style="width: 350px;height: 30px;float: left;" type="text" v-model="txt" />
+				<button @click="btn">提交</button>
+			</div>
+			<div id="wwc">
+				<h3 style="color: #fff;background:#5BC0DE;">未完成</h3>
+				<div style="width: 500px;height: 30px;" v-for="(i,$index) in wwc">
+					<input style="float: left;" type="checkbox" />
+					<div style="float: left;">{{txt}}</div>
+					<span @click="btn1($index)">取消</span>
+				</div>
+			</div>
+			<div id="ywc">
+				<h3 style="color: #fff;background:#5BC0DE;">已完成</h3>
+				<div v-for="(i,$index) in ywc">
+					<input style="float: left;" type="checkbox" @change="btn3($index)" />
+					<div>{{txt}}</div>
+				</div>
+			</div>
+			<div id="yqx">
+				<h3 style="color: #fff;background:#5BC0DE;">已取消</h3>
+				<div v-for="(i,$index) in yqx">
+					<del>{{txt}}</del>
+					<span @click="btn2($index)">恢复</span>
+				</div>
+			</div>
+		</div>
+		<script src="vue.js"></script>
+		<script>
+			new Vue({
+				el: '#box',
+				data: {
+					txt: '',
+					wwc: [],
+					ywc: [],
+					yqx: []
+				},
+				methods: {
+					btn() {
+						this.wwc.push({name: this.txt})
+					},
+					btn1(index) {
+						this.wwc.splice(index, 1)
+						this.yqx.push({name: this.txt})
+					},
+					btn2(index) {
+						this.yqx.splice(index, 1)
+						this.wwc.push({name: this.txt})
+					},
+					btn3(index) {
+						this.ywc.push({name: this.txt})
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>
