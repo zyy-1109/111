@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <style>
+        ul {
+            display: inline-block;
+        }
+
+        ul>li {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 10px;
+            transition: .5s;
+            cursor: pointer;
+            background: #ccc;
+        }
+
+        .active {
+            transform: scale(1.05, 1.05);
+            background: orange;
+            border: 1px solid red;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="app">
+        <ul>
+                留下评论再走吧！<br />
+                <li 
+                v-for="item in maxRate" 
+                :class="{active:currentindex>=item || activeindex>=item}"
+                @mouseover="mouseover(item)"
+                @mouseout="mouseout"
+                @click="select(item)"
+                ></li>
+        </ul>
+        <span>
+            {{activeindex}}
+        </span>
+    </div>
+    <script>
+        new Vue({
+            el:'#app',
+            data () {
+                return {
+                    maxRate: 5,
+                    currentindex:0,
+                    activeindex:0,
+                }
+            },
+            methods: {
+                mouseover(item){
+                    console.log(item)
+                    this.currentindex = item;
+                },
+                mouseout(){
+                    this.currentindex = 0
+                },
+                select(item){
+                    this.activeindex = item;
+                }
+            }
+        })
+    </script>
+</body>
+</html>
