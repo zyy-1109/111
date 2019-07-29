@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{margin: 0;padding: 0;list-style: none;}
+			.wrapper{
+				width:360px;
+				height: 640px;
+				border: 1px solid #ccc;
+				margin: 0 auto;
+				border-radius: 6px;
+			}
+			.header,.blue{
+				height: 60px;
+				background: dodgerblue;
+				text-align: center;
+				line-height: 60px;
+				color: white;
+				font-size: 28px;
+				margin-bottom: 10px;
+			}
+			#sub_in{
+				width: 80%;
+				height: 24px;
+			}
+			#sub_but{
+				padding: 3px 10px;
+				color: white;
+				border-radius: 3px;
+				background:dodgerblue;
+				display: inline-block;
+				position: relative;
+				top: 2px;
+			}
+			.blue{
+				height: 40px;
+				line-height: 40px;
+				font-size: 18px;
+				text-align: left;
+				text-indent: 20px;
+				margin: 0px;
+				border-bottom: 1px solid white;
+			}
+			li{
+				padding:5px 10px ;
+			}
+			.cx_btn{
+				float: right;
+				border: 1px solid #CCCCCC;
+				border-radius: 5px;
+				width: 50px;
+				text-align: center;
+				font-size: 14px
+			}
+		</style>
+		
+	</head>
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				记事本
+			</div>
+			<div style="padding: 10px;">
+				<input id="sub_in" type="text" v-model="text" />
+				<span id="sub_but" @click="tj">提交</span>
+			</div>
+			<div class="no">
+				<p class="blue">未完成</p>
+				<ul>
+					<li v-for='i in no_arr'>
+						{{no_arr.i}}
+						<input type="checkbox" @input="wanc"/>
+						{{i}}
+						<span class="cx_btn">取消</span>
+					</li>
+				</ul>
+			
+			</div>
+			<div class="yes">
+				<p class="blue">已完成</p>
+				<ul>	
+					<li v-for='i in yes_arr'>
+						<input type="checkbox"/>
+						{{i}}
+					</li>
+				</ul>
+			</div>
+			<div class="back">
+				<p class="blue">取消</p>
+				<ul>
+					<li  v-for='i in back_arr'>{{i}}</li>
+				</ul>
+			</div>
+		</div>
+		
+		
+	</body>
+	<script src="publick/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var arr=[]
+		new Vue({
+			el:'.wrapper',
+			data:{
+				text:'',
+				no_arr:{},
+				back_arr:[],
+				yes_arr:[]
+				
+			},
+			methods:{
+				tj(){
+					console.log('ok')
+					var s=JSON.stringify({
+						type:1,
+						con:this.text
+					})
+					arr.push(s)
+					localStorage.no_arr=[arr]
+					this.no_arr=JSON.parse(localStorage.no_arr)
+				},
+				wanc(){
+					
+					
+				},
+				ain(){
+					
+				}
+			}
+			
+			
+			
+			
+		})
+		
+		
+		
+		
+	</script>
+</html>
