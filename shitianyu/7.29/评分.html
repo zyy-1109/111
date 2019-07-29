@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+        #box{
+            line-height: 70px;
+        }
+        span{
+            margin-left: 40px;
+            font-size: 20px;
+        }
+        #box div {
+            width: 50px;
+            height: 50px; 
+            border: 1px solid #ccc;
+            margin: 10px; 
+            float: left; 
+        }
+    </style>
+</head>
+<body>
+<div id="box" v-cloak>
+   <span> {{num}}</span>
+    <div v-for="(i,$index) in 5" @click ="a($index)" @mouseover="num = $index+1" :style="{backgroundColor:num<=$index?'#fff':'red'}" @mouseout="num = n"></div>
+</div>
+</body>
+<script src="vue.js"></script>
+<script>
+    
+    new Vue({
+        el:'#box',
+        data:{
+            num:0,
+            n:0,
+        },
+        methods:{
+            a(index){
+                if(this.n == index+1){
+                    this.n=0;
+                }else{
+                    this.n = index + 1;
+                }
+            }
+        }
+    })
+</script>
+</html>

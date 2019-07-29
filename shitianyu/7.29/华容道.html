@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box .big{
+            float: left;
+        }
+        #box .big div{
+            width: 100px;
+            height: 100px;
+            float: left;
+            text-align: center;
+            line-height: 100px;
+            box-sizing: border-box;
+            border: 1px solid #000;
+        }
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="box" v-cloak>
+    <p style="line-height: 60px;">倒计时：{{time}}秒 <button @click="start">开始游戏</button><button @click="re" style="margin-left: 20px;">重新开始</button></p>
+    <div :style="{width:n*100 + 'px',height: n * 100 + 'px'}" class="big">
+        <div v-for="(i,$index) in list" @click="rep($index)">
+            {{i}}
+        </div>
+    </div>
+    <button @click="[n=3,a()]">3*3</button><button @click="[n=4,a()]">4*4</button><button @click="[n=5,a()]">5*5</button><button @click="[n=6,a()]">6*6</button>
+</div>
+</body>
+<script src="vue.js"></script>
+<script>
+    new Vue({
+        el:'#box',
+        data:{
+            n:0,
+            list:[],
+            time:60,
+            timer: '',
+            have:'',
+            space:' ',
+            ind:'',
+            arr:'',
+            // type:false,
+        },
+        methods:{
+            rep(index){ 
+                if(this.list[index+3] ==' '||this.list[index-3]==' '||this.list[index+1]==' '||this.list[index-1]==' ' ){
+                    for(var i=0;i<this.list.length;i++){
+                        if(this.list[i]==' '){
+                            this.ind = i;
+                        }
+                    }
+                    this.have = this.list[index] ;
+                    this.list.splice(this.ind,1,this.have);
+                    this.list.splice(index,1,this.space);
+                    console.log(this.list)
+                }
+                // for(var i=0;i<this.list.length;i++){
+                //     if(this.list[i] != this.arr[i]){
+                //         this.type = false;
+                //     }
+                //     if(this.type){
+                //         clearInterval(this.timer)
+                //         this.timer = '';
+                //         alert('挑战成功');
+                //     }
+                // }
+            },
+            re(){
+                this.time = 60;
+                clearInterval(this.timer)
+                this.timer = '';
+                this.timer = setInterval(()=>{
+                    this.time --;
+                },1000)
+            },
+            start(){
+                this.timer = setInterval(()=>{
+                    this.time --;
+                },1000)
+            },
+            a(){
+                this.list = [];
+                for(var i=0;i<this.n * this.n -1;i++){
+                   this.list.push(i+1)
+                }
+                this.list.push(' ')
+                this.arr = this.list;
+                console.log(this.arr)
+                function randomsort(a, b) {
+                    return Math.random()>.5 ? -1 : 1;
+                }
+                this.list.sort(randomsort);
+            }
+        },
+        watch:{
+            time(a,b){
+                if(a == -1){
+                    clearInterval(this.timer)
+                    this.time = 0;
+                    this.timer = '';
+                    alert('游戏结束')
+                }
+            },
+            list(a,b){
+                this.list = a;
+            }
+        }
+    })
+</script>
+</html>

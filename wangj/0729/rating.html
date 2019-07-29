@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: 'iconfont';
+            src: url('./font/iconfont.eot');
+            src: url('./font/iconfont.eot?#iefix') format('embedded-opentype'),
+                url('./font/iconfont.woff2') format('woff2'),
+                url('./font/iconfont.woff') format('woff'),
+                url('./font/iconfont.ttf') format('truetype'),
+                url('./font/iconfont.svg#iconfont') format('svg');
+        }
+
+        .iconfont {
+            font-family: "iconfont" !important;
+            /* font-size: 16px; */
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        ul>li {
+            font-size: 30px;
+            color: #ccc;
+            display: inline-block;
+            margin-left: 3px;
+            cursor: pointer;
+            transition: all .35s;
+        }
+
+        ul>li.active {
+            color: orange;
+            transform: scale(1.1, 1.1);
+            transition: all .35s;
+        }
+
+        .e{
+            font-size: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <ul>
+            <li class="iconfont" v-for=" i in num" :key="i" :class="{active:newNum>=i || store>=i}" @mouseover="move(i)"
+                @mouseout="leave(i)" @click="choose(i)">&#xe754;</li>
+                <span>{{newNum}}</span>
+        </ul>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+<script>
+    var vm = new Vue({
+        el: '.box',
+        data() {
+            return {
+                num: 5,
+                newNum: 0,
+                store: 0,
+            }
+        },
+        methods: {
+            move(i) {
+                this.newNum = i
+            },
+            leave() {
+                this.newNum = 0
+            },
+            choose(i) {
+                this.store = i
+            }
+        },
+    })
+</script>
+
+</html>
