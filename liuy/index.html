@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .box {
+            height: 460px;
+            border: 1px solid #ccc;
+            margin: 50px auto;
+        }
+
+        .header {
+            line-height: 60px;
+            background-color: pink;
+            color: #fff;
+            text-align: center;
+        }
+        .footer{
+            width: 500px;
+            margin:0 auto;
+        }
+        .input {
+            margin: 20px 0;
+        }
+
+        h2 {
+            line-height: 40px;
+            background-color: pink;
+            border: 1px solid #ccc;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .wei,
+        .yi,
+        .qu {
+            margin: 10px 0;
+        }
+
+        button {
+            float: right;
+        }
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box" v-cloak>
+        <div class="header">
+            <h1>记事本</h1>
+        </div>
+        <div class="footer">
+            <div class="input">
+                <input type="text" v-model="search_s" placeholder="待办事项" style="width: 424px; height: 33px;border-radius: 7px; border:1px solid #ccc"> 
+                <input type="submit" @click="btn" value="提交" style="width: 64px;height: 33px;border-radius: 5px;background-color:pink;color: #fff">
+            </div>
+            <div class="wei">
+                <h2>未完成</h2>
+                <div v-for="(i,$index) in wei":key="$index+i">
+                    <input type="checkbox" id="che"@click="btn2(i,$index)">
+                    <span>{{i}}</span>
+                    <button @click="shan($index)">取消</button>
+                </div>
+            </div>
+            <div class="yi">
+                <h2>已完成</h2>
+
+                <div v-for="(i,$k) in yi":key="$k+i">
+                    <input type="checkbox" checked="true" id="ches" @click="btn3(i,$k)">
+                    <span>{{i}}</span>
+                    <span style="float: right">2019/7/26</span>
+                </div>
+            </div>
+            <div class="qu">
+                <h2>已取消</h2>
+                <div v-for="(i,$index) in qu" style="text-decoration: line-through;">
+                    <span>{{i}}</span>
+                    <button @click="hui(i,$index)">已恢复</button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</body>
+<script src="vue.js"></script>
+<script>
+    new Vue({
+        el: '.box',
+        data: {
+            search_s: '',
+            wei: [],
+            yi: [],
+            qu: [],
+        },
+        methods: {
+            btn() {
+                this.wei.push(this.search_s)
+            },
+            btn2(a,b) {
+                if(che.checked = 'checked'){
+                this.wei.splice(b, 1)
+                this.yi.push(this.search_s)
+                }
+                // checkboxs.checked = true
+            },
+            btn3(a,b) {
+                if(a.checked = true){
+                this.yi.splice(b, 1)
+                this.wei.push(this.search_s)
+                }
+            },
+            shan(index){
+                this.qu.push(this.wei[index])
+                this.wei.splice(index,1)
+            },
+            hui(i,index){
+                this.wei.push(i)
+                this.qu.splice(index,1)
+            }
+
+        },
+    })
+</script>
+
+</html>

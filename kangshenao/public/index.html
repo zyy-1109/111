@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_1317133_2nvuqi5u5y9.css">
+
+		<style>
+			#box{
+				width: 500px;height: 600px;background: #fff;margin: 0 auto;border: 1px solid #000;
+			}
+			#header{
+				width: 100%;height: 40px;background: #00b0f0;
+			}
+			#header span:nth-of-type(1){
+				font-size: 18px;
+				text-align: center;line-height: 40px;color: #fff;padding-left: 50%;
+			}
+			#header span:nth-of-type(2) i{
+				color: #FFFFFF;font-size: 20px;padding-left: 120px;		
+			}
+			#seatch{
+				margin-top: 10px;margin-left: 30px;
+			}
+			#seatch input{
+				width: 300px;height: 30px;
+			}
+			#seatch button{
+				background: dodgerblue;margin-left: 7px;color: #fff;
+			}
+			#bod{
+				margin-left: 34px;margin-top: 20px;	
+				
+			}
+			#bod div{
+				width: 430px;height: auto;margin-top: 2px;background: #00b0f0;color: #fff;
+			}
+			li{
+				list-style: none;
+			}
+			#bod div div{
+				height: auto;	
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<div id="header">
+				<span>记事本</span>
+				<span><i class="iconfont icon-mulu"></i></span>
+			</div>
+			<div id="seatch">
+				<input type="text" placeholder="代办事项" v-model="values" id="ipt">
+				<button @click="btn">提交</button>
+			</div>
+			
+			<div id="bod">
+				<div id="wei">
+					<div class="title">未完成 <button class="f-r">下拉</button></div>
+					<li v-if="wei" v-for="i,$index in wei" :key="$index+ new Date()">
+					<input type="checkbox" id="name1" @change="appd($index,wei,yi)"/>
+					<span>{{i}}</span><button @click="appd(i,wei,quxiao)">取消</button>
+				</li>		
+					
+				</div>
+				<div id="yi">
+					<div id="titile">已完成</div>
+					<li v-for="i in arr"  v-if="yi">
+						<input type="checkbox">
+						<button style="margin-left: 300px;"></button>
+					</li>
+				</div>
+				<div id="quxiao">
+					<div id="titile">已取消</div>
+					<li v-for="i in arr"  v-if="yi">
+						<input type="checkbox">
+						<button style="margin-left: 300px;">恢复</button>
+					</li>
+				</div>
+			</div>
+			
+			</div>
+	</body>
+	<script src="vue.js"></script>
+	<script src="vue-resource.js"></script>
+	<script>
+		new Vue({
+			el:'#box',
+			data:{
+				values:'',
+				arr:[],
+				wei;[],
+				yi:[],
+				quxiao:[]
+			},
+			methods:{
+				btn(){
+					ipt.value=''
+					this.wei.push(this.values)
+				},
+				appd(i,a,b){
+					console.log(this)
+					var str=a.splice(i,1)[0]
+					b.push(str)
+				}
+			}
+		
+			
+		})
+	</script>
+</html>

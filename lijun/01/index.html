@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="index.css"/>
+	</head>
+	<body>
+		<div class="content">
+			<div class="input">
+				<input type="text" placeholder="待办事项" v-model="values" id="ipt"/><button @click="sbm">提交</button>
+			</div>
+			<!--未完成-->
+			<div class="wei"><div class="title">未完成 <button class="f-r">下拉</button></div>
+				<li v-if="wei" v-for="i,$index in wei" :key="$index+ new Date()">
+					<input type="checkbox" id="name1" @change="appd($index,wei,yi)"/><span>{{i}}</span><button @click="appd(i,wei,quxiao)">取消</button>
+				</li>
+			</div>
+			<!--已完成-->
+			<div class="yi"><div class="title">已完成 <button class="f-r">下拉</button></div>
+				<li v-if="yi" v-for="i in yi">
+					<input type="checkbox" checked @click="appd(i,yi,wei)"/><span>{{i}}</span><span class="f-r" style="color: darkgray;" >时间</span>
+				</li>
+			</div>
+			<!--已取消-->
+			<div class="quxiao">
+				<div class="title">已取消 <button class="f-r">下拉</button></div>
+				<li v-if="quxiao" v-for="i in quxiao">
+					<input type="checkbox"/><span>{{i}}</span><button class="f-r" @click="appd(i,quxiao,wei)">恢复</button>
+				</li>
+			</div>
+	</div>
+	</body>
+	<script src="vue.js"></script>
+	<script type="text/javascript">
+		new Vue({
+			el:'.content',
+			data:{
+				values:'',
+				wei:[],
+				yi:[],
+				quxiao:[]
+			},
+			methods:{
+				sbm(){
+					ipt.value=''
+					this.wei.push(this.values)
+				},
+				appd(i,a,b){
+					var str=a.splice(i,1)[0]
+					b.push(str)
+				}
+			}
+		})
+	</script>
+</html>
