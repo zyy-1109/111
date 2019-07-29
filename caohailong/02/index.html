@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			
+			#box .on {
+				background: red;
+			}
+			
+			#box div {
+				width: 56px;
+				height: 59px;
+				border-radius:50%;
+				margin-left: 10px;
+				float: left;
+				border:1px solid #000;
+			}
+			#box span{
+				font-size:20px;
+				display: inline-block;
+				line-height: 60px;
+				width: 30px;
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box">
+			<div v-for="i in 5" @mouseenter="enter(i)" @mouseleave="leave()" @click="Selected(i)" :class="{'on':num>=i}"></div>
+			<span>{{num}}</span>
+		</div>
+		<script src="vue.js"></script>
+		<script>
+		 new Vue({
+				el: '#box',
+				data: {
+					num: 0,
+					flag: false
+				},
+				methods: {
+					enter(i) {
+						if(!this.flag) {
+							this.num = i;
+						}
+					},
+					leave() {
+						if(!this.flag) {
+							this.num = 0;
+						}
+					},
+					Selected(i) {
+						this.flag = true;
+						this.num = i;
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>
