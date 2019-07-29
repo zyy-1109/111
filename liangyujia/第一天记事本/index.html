@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<title>Document</title>
+	<style>* {
+	margin: 0;
+	padding: 0;
+}
+
+#box {
+	width: 80%;
+	height: 500px;
+	background: pink;
+	margin: 0 auto
+}
+
+.header {
+	height: 50px;
+	background: cyan;
+	text-align: center;
+	font-size: 30px;
+	line-height: 50px;
+	color: white;
+}
+
+.header span {
+	float: right;
+	margin-right: 10px;
+}
+.wwc,.ywc,.yqx{
+	width: 100%;
+	min-height: 50px;
+	background: cyan;
+	margin:5px 0;
+	
+}
+p{
+	font-size: 20px;
+	line-height: 50px;
+	color:white;
+}
+li{
+	height: 40px;
+	list-style: none;
+	background: pink;
+	line-height: 40px;
+	padding-left: 15px;
+}
+.quxiao{
+	float: right;
+	margin-top: 10px;
+	margin-right:20px;
+}
+[v-cloak]{
+	display: none;
+}
+.sadfas{
+	text-decoration: line-through;
+	color:gray; 
+}
+.times{
+	float:right;
+	margin-right: 20px;
+}
+</style>
+</head>
+<body>
+	<div id="box" v-cloak>
+		<div class="header">记事本<span>三</span></div>
+		<div class="main">
+			<div>
+				<input type="text" style="margin-left:20px;height: 30px;width: 500px;margin-top:15px" placeholder="代办事项" v-model="str"/>
+				<button style="height: 30px;background: cyan;width: 50px;" @click="btn">提交</button>
+			</div>
+			<div class="wwc">
+				<p>未完成</p>
+				<ul>
+					<li v-for="(i,$index) in wwc">
+						<input type="checkbox" style="margin-right:10px" @click="check(i,$index)" :key="$index+new Date()"/>{{i}}
+						<button @click="quxiao(i,$index)" class="quxiao">取消</button>
+					</li>
+				</ul>
+			</div>
+			<div class="ywc">
+				<p>已完成</p>
+				<ul>
+					<li v-for="(i,$index) in ywc">
+						<input type="checkbox" style="margin-right:10px" @click="check_back(i,$index)" checked :key="$index+new Date()"/>{{i}}
+						<span class="times">{{times}}</span>
+					</li>
+				</ul>
+			</div>
+			<div class="yqx">
+				<p @click="quxiao">已取消</p>
+				<ul>
+					<li v-for="(i,$index) in yqx" class="sadfas">{{i}}<button class="quxiao" @click="huifu(i,$index)">恢复</button></li>
+				</ul>
+			</div>
+		</div>
+		
+		<!--{{wwc}}<br />
+		{{ywc}}<br />
+		{{yqx}}-->
+	</div>
+</body>
+<script src="vue.js"></script>
+<script src="jquery.js"></script>
+<script>
+	new Vue({
+		el:'#box',
+		data:{
+			str:'',
+			wwc:[],
+			ywc:[],
+			yqx:[],
+			times:'',
+		},
+		methods:{
+			btn(){
+				if(this.str==''){
+					alert('请输入')
+				}else{
+					this.wwc.push(this.str)
+				}
+			},
+			quxiao(a,b){
+				this.wwc.splice(b,1)
+				this.yqx.push(a)
+			},
+			huifu(a,b){
+				this.yqx.splice(b,1)
+				this.wwc.push(a)
+			},
+			check(a,b){
+				this.wwc.splice(b,1)
+				this.ywc.push(a)
+				
+				var date=new Date()
+				console.log(date)
+				var a=date.getFullYear()
+				var b=date.getMonth()+1
+				var c=date.getDate()
+				this.times=a+'-'+b+'-'+c
+			},
+			check_back(a,b){
+				this.ywc.splice(b,1)
+				this.wwc.push(a)
+			}
+		},	
+	})
+
+	
+	
+	
+	
+	
+</script>
+</html>
