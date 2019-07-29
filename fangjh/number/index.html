@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_1322307_sdkpc9a3vs.css"/>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			#on{
+				width: 300px;
+				margin: 0 auto;
+				margin-top: 30px;
+			}
+			.container{
+				width:300px;
+			}
+			
+			.item{
+				width:100px;
+				height: 100px;
+				text-align: center;
+				line-height: 100px;
+				border: 1px solid #808080;
+				float: left;
+				box-sizing: border-box;
+				font-size: 20px;
+			}
+			button{
+				margin-left: 10px;
+			}
+			[v-cloak]{
+				display: none;
+			}
+			#end{
+				width: 300px;
+				height: 100px;
+				text-align: center;
+				line-height: 50px;
+				font-size: 20px;
+				border-radius: 5px;
+				border: 1px solid #808080;
+				background: white;
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				margin-left: -150px;
+				margin-top: -50px;
+			}
+			#end i{
+				width: 16px;
+				height: 16px;
+				color: black;
+				font-size: 16px;
+				position: absolute;
+				right:5px;
+				top: 5px;
+				line-height: 16px;
+			}
+			.btn_box button{
+				width: 40px;
+				height: 25px;
+				font-size: 14px;
+				border-radius: 4px;
+				outline: none;
+				margin: 10px 5px ;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="on" v-cloak>
+			<h3>距离游戏结束还有：{{tme}}秒</h3>
+			<div class="btn_box">
+				难度：
+				<button @click="btn($index,i)" v-for="(i,$index) in arr1" :disabled="$index==index?!type1:type1">{{i}}</button>
+			</div>
+			
+			<div class="container" :style="{width:num+'px'}">
+				<div class="item" v-for="(i,$index) in arr" @click="turn(i,$index)">{{i}}</div>
+			</div>
+			<div id="end" v-show="type"><i class="iconfont icon-wrong" @click="wrong"></i>
+				<span id="txt"></span>
+			</div>
+			
+		</div>
+	</body>
+	<script src="vue.js"></script>
+	<script type="text/javascript">
+		new Vue({
+			el:'#on',
+			data:{
+				arr1:['3X3','4X4','5X5','6X6'],
+				arr:[],
+				num:0,
+				index:-1,
+				num1:'',
+				on:[],
+				tme:60,
+				type:false,
+				tid:null,
+				type1:false,
+				tme1:0,
+			},
+			methods:{
+				btn($index,i){
+					clearInterval(this.tid)
+					this.tid=null
+					this.tme=60
+					this.tme1=0
+					this.arr=[]
+					this.on=[]
+					this.index=$index
+					if (this.index==$index) {
+						this.num=parseInt(i)*100
+						var a=parseInt(i)
+						this.num1=a
+//						console.log(a*a-1)
+						for (var c=0;c<a*a-1;c++) {
+							this.arr.push(c+1)
+							this.on.push(c+1)
+						}
+						this.arr.push('')
+						this.on.push('')
+						this.arr.sort(function(){
+							return Math.random()-0.5
+						})
+						this.type1=false
+					}
+					this.tid=setInterval(()=>{
+						this.tme--
+						this.tme1++
+						if (this.tme==0) {
+							clearInterval(this.tid)
+							this.tid=null
+							this.type=!this.type
+							this.arr=[]
+							this.on=[]
+							txt.innerHTML=`抱歉!游戏失败<br />共用时${60-this.tme}秒`
+						}
+						
+					},1000)
+					
+					
+				},
+				turn(i,$index){
+					var index1=this.arr.indexOf('')
+					//判断空格在第几列
+					var lie=index1%this.num1+1
+//					//第几行
+					var hang=parseInt(index1/this.num1)+1
+					var lie1=$index%this.num1+1
+					var hang1=parseInt($index/this.num1)+1
+					if((lie1==lie&&hang1==hang-1)||(hang1==hang&&lie1==lie-1)||(lie1==lie&&hang1==hang+1)||(hang1==hang&&lie1==lie+1)){
+//						alert(1)
+						this.$set(this.arr,index1,this.arr[$index])
+						this.$set(this.arr,$index,"")
+						
+					}
+					
+					if (JSON.stringify(this.arr) == JSON.stringify(this.on)) {
+						this.type=!this.type
+						clearInterval(this.tid)
+						this.tid=null
+						this.arr=[]
+						this.on=[]
+						txt.innerHTML=`恭喜!游戏结束<br />共用时${60-tme}秒`
+					}
+					
+				},
+				wrong(){
+					this.type=!this.type
+					this.tme=60
+					this.type1=false
+					this.index=-1
+					
+				}
+			}
+		})
+	</script>
+</html>

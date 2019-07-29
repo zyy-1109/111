@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			span{
+				height: 30px;
+				line-height: 30px;
+				display: inline-block;
+				float: left;
+				margin-right: 10px;
+			}
+			.light{
+				width: 30px;
+				height: 30px;
+				border: 1px solid #808080;
+				display: inline-block;
+				margin-left: 5px;
+				transition: all 0.2s;
+				clip-path:polygon(
+				47% 0%, 
+				59% 23%,
+				92% 29%, 
+				68% 47%, 
+				79% 82%, 
+				46% 54%, 
+				16% 79%, 
+				29% 43%, 
+				7% 31%, 
+				38% 25%
+				
+				);
+				background: lightgrey;
+
+			}
+			.on1{
+				border-color: tomato;
+				background: tomato;
+				transition: all 0.2s;
+			}
+			[v-cloak]{
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="on" v-cloak>
+			<span>{{num}}</span>
+			<div v-for="(i,$index) in 5" @mouseover="change($index)" :class="index>=$index?'light on1':'light'" ></div>
+		</div>
+	</body>
+	<script src="vue.js"></script>
+	<script type="text/javascript">
+		new Vue({
+			el:'#on',
+			data:{
+				index:-1,
+				num:0
+			},
+			methods:{
+				change($index){
+					this.num=$index+1
+					this.index=$index
+				}
+			}
+		})
+	</script>
+</html>

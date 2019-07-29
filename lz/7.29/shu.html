@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        #app {
+            height: 100%;
+        }
+
+
+        .box {
+            width: 80px;
+            height: 80px;
+            float: left;
+            font-size: 15px;
+            line-height: 80px;
+            text-align: center;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" :style="'width:'+ num / num1 * 80 +'px'">
+        <ul></ul>
+        <div class="box" v-for="(num,index) in arr" @click="move(index)">
+            {{num}}
+        </div>
+        <button @click="rander">重新开始</button>
+        <button @click="btn(4)">4*4</button>
+        <button @click="btn(5)">5*5</button>
+        <button @click="btn(6)">6*6</button>
+    </div>
+</body>
+<script src="../vue.js"></script>
+<script>
+    let vm = new Vue({
+        el: "#app",
+        data: {
+            arr: [],
+            num: '',
+            num1: 3,
+        },
+        mounted() {
+            this.rander();
+        },
+        created() {
+            this.prarr
+            this.sort()
+        },
+        computed: {
+            prarr() {
+                this.arr = []
+                for (var i = 1; i < this.num1 * this.num1; i++) {
+                    this.arr.push(i)
+                }
+                this.arr.push('')
+                this.num = this.arr.length
+
+            },
+        },
+        methods: {
+            sort() {
+                return this.arr.sort(() => Math.random() - 0.5)
+            },
+            btn(i) {
+                this.num1 = i
+                this.prarr
+                this.sort()
+            },
+            rander() {
+                let arr2 = [];
+                for (let i = 0; arr2.length < 8; i++) {
+                    let num = Math.ceil(Math.random() * 8)
+                    if (arr2.indexOf(num) == -1) {
+                        arr2.push(num)
+                    }
+                }
+                this.arr = arr2;
+                this.arr.push("");
+            },
+            move(b) {
+                var left = this.arr[b - 1],
+                    right = this.arr[b + 1],
+                    top = this.arr[b - this.num1],
+                    bottom = this.arr[b + this.num1];
+                if (left == '') {
+                    this.$set(this.arr, b - 1, this.arr[b])
+                    this.$set(this.arr, b, '')
+                } else if (right == '') {
+                    this.$set(this.arr, b + 1, this.arr[b])
+                    this.$set(this.arr, b, '')
+                } else if (top == '') {
+                    this.$set(this.arr, b - this.num1, this.arr[b])
+                    this.$set(this.arr, b, '')
+                } else if (bottom == '') {
+                    this.$set(this.arr, b + this.num1, this.arr[b])
+                    this.$set(this.arr, b, '')
+                }
+
+                if (this.endGame()) {
+                    alert('success!')
+                }
+
+            },
+            endGame() {
+                let i = 0;
+                l = this.arr.length;
+                for (i; i < l - 2; i++) {
+                    if (this.arr[0] === "" || this.arr[l - 1] === "") {
+                        if (this.arr[i] < this.arr[i + 1]) {
+
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+    })
+</script>
+
+</html>
