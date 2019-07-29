@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        #box{
+            width: 100%;
+        }
+        .show{
+            width: 100%;
+            height: 60px;
+            text-align: center;
+            background-color: #3695ff;
+            font-size: 25px;
+            line-height: 60px;
+            font-weight: 600;
+            color: #fff;
+        }
+        .showBox{
+            width: 450px;
+            margin: 0 auto;
+        }
+        header{
+            padding: 20px 0;
+            overflow: hidden;
+        }
+        header input{
+            width: 85%;
+            height: 30px;
+            float: left;
+            padding-left: 10px;
+            box-sizing: border-box;
+        }
+        header button{
+            width: 12%;
+            height: 30px;
+            float: right;
+            background: #3695ff;
+            border: none;
+            border-radius: 3px;
+        }
+        nav{
+            margin-bottom: 1px;
+        }
+        nav p{
+            width: 100%;
+            height: 30px;
+            font-size: 16px;
+            line-height: 30px;
+            color: #fff;
+            background-color: #3695ff;
+            padding-left: 10px;
+        }
+        nav li{
+            width: 100%;
+            padding: 7px 0;
+            overflow: hidden;
+            border: solid 1px #ccc;
+            border-top: none;
+        }
+        li button{
+            float: right;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="box">
+        <div class="show">
+            记事本
+        </div>
+        <div class="showBox">
+            <header>
+                <input type="text" v-model="input" placeholder="待办事项">
+                <button @click="btn()">提交</button>
+            </header>
+            <div class="content">
+                <nav>
+                    <p>未完成</p>
+                    <ul>
+                        <li v-for="(i,$index) in wwc_list" :key="$index+i">
+                            <input type="checkbox" @change="btn2($event,$index)">
+                            {{i}}
+                            <button @click="btn3($index)">取消</button>
+                        </li>
+                    </ul>
+                </nav>
+
+
+                <nav>
+                    <p>已完成</p>
+                    <ul>
+                        <li v-for="(i,$index) in ywc_list" :key="$index+i">
+                            <input type="checkbox" checked @change="btn2($event,$index)">
+                            {{i}}
+                        </li>
+                    </ul>
+                </nav>
+
+                <nav>
+                    <p>已取消</p>
+                    <ul>
+                        <li v-for="(i,$index) in yqx_list" :key="$index+i">
+                            {{i}}
+                            <button @click="btn4($index)">恢复</button>
+                        </li>
+                    </ul>
+                </nav>
+
+
+            </div>
+        </div>
+    </div>
+</body>
+<script src="vue.js"></script>
+<script>
+    new Vue({
+        el: "#box",
+        data: {
+            input: '',
+            wwc_list: [],
+            ywc_list: [],
+            yqx_list: [],
+        },
+        created(){
+            if(localStorage.wwc_list){
+                this.wwc_list=JSON.parse(localStorage.wwc_list)
+            }
+            if(localStorage.ywc_list){
+                this.ywc_list=JSON.parse(localStorage.ywc_list)
+            }if(localStorage.yqx_list){
+                this.yqx_list=JSON.parse(localStorage.yqx_list)
+            }
+
+        },
+        methods:{
+            btn(){
+                this.wwc_list.push(this.input)
+                this.input=''
+                localStorage.wwc_list=JSON.stringify(this.wwc_list)
+            },
+            btn2(event,index){
+                var f=event.target.checked
+                console.log(f)
+                if(f==true){
+                    var atr=this.wwc_list[index]
+                    this.wwc_list.splice(index,1)
+                    this.ywc_list.push(atr)
+                }else if(f==false){
+                    var wwc=this.ywc_list[index]
+                    this.ywc_list.splice(index,1)
+                    this.wwc_list.push(wwc)
+                }
+                localStorage.wwc_list=JSON.stringify(this.wwc_list)
+                localStorage.ywc_list=JSON.stringify(this.ywc_list)
+            },
+            btn3(i){
+                var str=this.wwc_list[i]
+                this.wwc_list.splice(i,1)
+                this.yqx_list.push(str)
+                localStorage.wwc_list=JSON.stringify(this.wwc_list)
+                localStorage.yqx_list=JSON.stringify(this.yqx_list)
+            },
+            btn4(i){
+                var str=this.yqx_list[i]
+                this.yqx_list.splice(i,1)
+                this.wwc_list.push(str)
+                localStorage.wwc_list=JSON.stringify(this.wwc_list)
+                localStorage.yqx_list=JSON.stringify(this.yqx_list)
+            }
+        }
+    })
+</script>
+</html>
