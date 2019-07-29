@@ -7,60 +7,40 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-        html,
-        body,
-        div {
-            margin: 0;
+        * {
             padding: 0;
+            margin: 0;
+            list-style: none;
         }
 
         #app {
-            width: 400px;
-            height: 422px;
-            margin: 200px auto;
-            background-color: black;
-            text-align: center;
-            color: white;
+            height: 100%;
         }
 
-        .puzzle {
-            width: 400px;
-            list-style: none;
-            overflow: hidden;
-            margin-left: -40px;
-            margin-bottom: 0px;
-            margin-top: -23px;
-        }
 
-        li {
-            width: 100px;
-            height: 100px;
-            background: orange;
+        .box {
+            width: 80px;
+            height: 80px;
             float: left;
-            line-height: 100px;
-            -webkit-text-stroke: 1px #fff;
-            color: transparent;
-            font-size: 48px;
+            font-size: 15px;
+            line-height: 80px;
+            text-align: center;
             border: 1px solid #ccc;
             box-sizing: border-box;
-        }
-
-        .puzzle-empty {
-            background: #ccc;
-            box-shadow: 0px 0px 2px #000 inset;
         }
     </style>
 </head>
 
 <body>
-    <div id="app">
-        <ul class="puzzle">
-            <li :class="{'puzzle-item':true,'puzzle-empty':!num}" v-for="(num,index) in numLists"
-                @click="moveTo(index)">
-                {{num}}
-            </li>
-        </ul>
-        <button v-on:click="rander">重新开始</button>
+    <div id="app" :style="'width:'+ num / num1 * 80 +'px'">
+        <ul></ul>
+        <div class="box" v-for="(num,index) in arr" @click="move(index)">
+            {{num}}
+        </div>
+        <button @click="rander">重新开始</button>
+        <button @click="btn(4)">4*4</button>
+        <button @click="btn(5)">5*5</button>
+        <button @click="btn(6)">6*6</button>
     </div>
 </body>
 <script src="../vue.js"></script>
@@ -68,41 +48,65 @@
     let vm = new Vue({
         el: "#app",
         data: {
-            numLists: []
+            arr: [],
+            num: '',
+            num1: 3,
         },
         mounted() {
             this.rander();
         },
+        created() {
+            this.prarr
+            this.sort()
+        },
+        computed: {
+            prarr() {
+                this.arr = []
+                for (var i = 1; i < this.num1 * this.num1; i++) {
+                    this.arr.push(i)
+                }
+                this.arr.push('')
+                this.num = this.arr.length
+
+            },
+        },
         methods: {
+            sort() {
+                return this.arr.sort(() => Math.random() - 0.5)
+            },
+            btn(i) {
+                this.num1 = i
+                this.prarr
+                this.sort()
+            },
             rander() {
-                let arr = [];
-                for (let i = 0; arr.length < 15; i++) {
-                    let num = Math.ceil(Math.random() * 15)
-                    if (arr.indexOf(num) == -1) {
-                        arr.push(num)
+                let arr2 = [];
+                for (let i = 0; arr2.length < 8; i++) {
+                    let num = Math.ceil(Math.random() * 8)
+                    if (arr2.indexOf(num) == -1) {
+                        arr2.push(num)
                     }
                 }
-                this.numLists = arr;
-                this.numLists.push("");
+                this.arr = arr2;
+                this.arr.push("");
             },
-            moveTo(i) {
-                let currentNum = this.numLists[i],
-                    leftNum = this.numLists[i - 1],
-                    rigthNum = this.numLists[i + 1],
-                    topNum = this.numLists[i - 4],
-                    buttonNum = this.numLists[i + 4];
-                if (rigthNum === "") {
-                    Vue.set(this.numLists, i + 1, currentNum);
-                    Vue.set(this.numLists, i, "");
-                } else if (leftNum === "") {
-                    Vue.set(this.numLists, i - 1, currentNum);
-                    Vue.set(this.numLists, i, "");
-                } else if (topNum === "") {
-                    Vue.set(this.numLists, i - 4, currentNum);
-                    Vue.set(this.numLists, i, "");
-                } else if (buttonNum === "") {
-                    Vue.set(this.numLists, i + 4, currentNum);
-                    Vue.set(this.numLists, i, "");
+            move(b) {
+                var left = this.arr[b - 1],
+                    right = this.arr[b + 1],
+                    top = this.arr[b - this.num1],
+                    bottom = this.arr[b + this.num1];
+                if (left == '') {
+                    this.$set(this.arr, b - 1, this.arr[b])
+                    this.$set(this.arr, b, '')
+                } else if (right == '') {
+                    this.$set(this.arr, b + 1, this.arr[b])
+                    this.$set(this.arr, b, '')
+                } else if (top == '') {
+                    this.$set(this.arr, b - this.num1, this.arr[b])
+                    this.$set(this.arr, b, '')
+                } else if (bottom == '') {
+                    this.$set(this.arr, b + this.num1, this.arr[b])
+                    this.$set(this.arr, b, '')
                 }
 
                 if (this.endGame()) {
@@ -112,10 +116,10 @@
             },
             endGame() {
                 let i = 0;
-                l = this.numLists.length;
+                l = this.arr.length;
                 for (i; i < l - 2; i++) {
-                    if (this.numLists[0] === "" || this.numLists[l - 1] === "") {
-                        if (this.numLists[i] < this.numLists[i + 1]) {
+                    if (this.arr[0] === "" || this.arr[l - 1] === "") {
+                        if (this.arr[i] < this.arr[i + 1]) {
 
                         } else {
                             return false;

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #box{
+            height: 100%;
+        }
+        .box{
+            width: 80px;
+            height: 80px;
+            border: solid 1px #ccc;
+            float: left;
+            box-sizing: border-box;
+            text-align: center;
+            line-height: 80px;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+<div id="box" :style="'width:'+ num / num1 * 80 +'px'">
+    {{num}}
+    <button @click="sort">刷新</button>
+    <div>
+        <div @click="tab($i)" class="box" v-for="(i,$i) in arr">{{i}}</div>
+    </div>
+    <button @click="btn(4)">4*4</button>
+    <button @click="btn(5)">5*5</button>
+    <button @click="btn(6)">6*6</button>
+</div>
+</body>
+<script src="vue.js"></script>
+<script>
+    new Vue({
+        el:'#box',
+        data:{
+            arr:[],
+            num:'',
+            num1:3,
+        },
+        methods:{
+            btn(i){
+                this.num1 = i
+                this.prlist
+                this.sort()
+            },
+            sort(){
+                return this.arr.sort(() => Math.random() - 0.5)
+            },
+            tab(b){
+            var left = this.arr[b-1],
+                right = this.arr[b+1],
+                top = this.arr[b-this.num1],
+                bottom = this.arr[b+this.num1];
+              if (left == ''){
+                  this.$set(this.arr,b-1,this.arr[b])
+                  this.$set(this.arr,b,'')
+              }else if (right == '') {
+                  this.$set(this.arr,b+1,this.arr[b])
+                  this.$set(this.arr,b,'')
+              }else if(top == ''){
+                  this.$set(this.arr,b-this.num1,this.arr[b])
+                  this.$set(this.arr,b,'')
+              }else if(bottom == ''){
+                  this.$set(this.arr,b+this.num1,this.arr[b])
+                  this.$set(this.arr,b,'')
+              }
+          }
+        },
+        created(){
+            this.prlist
+            this.sort()
+        },
+        computed:{
+            prlist(){
+                this.arr = []
+                for (var i = 1;i <this.num1*this.num1;i++){
+                    this.arr.push(i)
+                }
+                this.arr.push('')
+                this.num = this.arr.length
+
+            },
+        },
+    })
+</script>
+</html>
