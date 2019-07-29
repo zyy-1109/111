@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #box {
+            width: 60%;
+            height: 600px;
+            margin: 50px auto;
+            border: 2px solid black;
+        }
+
+        header {
+            height: 80px;
+            line-height: 80px;
+            font-size: 30px;
+            text-align: center;
+            background: black;
+            color: #fff;
+        }
+
+        .search {
+            height: 80px;
+            line-height: 80px;
+        }
+
+        .search input {
+            width: 50%;
+            margin: 0 10%;
+            height: 36px;
+            line-height: 36px;
+            outline: none;
+            border: 2px solid black;
+            border-radius: 6px;
+            box-sizing: border-box;
+            padding-left: 20px;
+        }
+
+        .search button {
+            width: 20%;
+            height: 36px;
+            border: none;
+            background: black;
+            color: #fff;
+            line-height: 36px;
+            text-align: center;
+            font-size: 20px;
+            border-radius: 20px;
+
+        }
+
+        .content h3 {
+            width: 80%;
+            height: 40px;
+            line-height: 40px;
+            margin: 0 auto;
+            background: black;
+            color: #fff;
+            box-sizing: border-box;
+            padding-left: 30px;
+            font-size: 18px;
+            border-radius: 10px;
+        }
+
+        .list {
+            width: 70%;
+            margin: 0 auto;
+        }
+
+        .list>div {
+            height: 40px;
+            line-height: 40px;
+        }
+
+        .list>div button {
+            width: 50px;
+            height: 30px;
+            text-align: center;
+            background: black;
+            border: none;
+            color: #fff;
+            margin: 5px;
+            float: right;
+            border-radius: 15px;
+        }
+
+        .list>div span {
+            float: right;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box" v-cloak>
+        <header>记事本</header>
+        <div class="search">
+            <input type="text" v-model="val" @keydown.enter="tian()" placeholder="待办事项">
+            <button @click="tian()">提交</button>
+        </div>
+        <div class="content">
+            <div>
+                <h3>未完成</h3>
+                <div class="list">
+                    <div v-for="(i,$index) in wei" :key='$index+new Date()'>
+                        <input type="checkbox" @change="xuan(i,$index)">
+                        {{i}}
+                        <button @click="quxiao($event,i,$index)">取消</button>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h3>已完成</h3>
+                <div class="list">
+                    <div v-for="(i,$index) in yi" :key='$index+new Date()'>
+                        <input type="checkbox" checked @change="buxuan(i,$index)">
+                        {{i}}
+                        <span>2019-07</span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h3>已取消</h3>
+                <div class="list">
+                    <div v-for="(i,$index) in qu" :key='$index+new Date()'>
+                        <a style="color: #666;text-decoration: line-through">{{i}}</a>
+                        <button @click="hui($event,i,$index)">恢复</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../vue.js"></script>
+<script src="../vue-resource.js"></script>
+<script>
+    new Vue({
+        el: '#box',
+        data: {
+            wei: [],
+            yi: [],
+            qu: [],
+            val: '',
+
+        },
+        created() {
+            if (localStorage.wei) {
+                this.wei = localStorage.wei.split(',')
+            }
+            if (localStorage.yi) {
+                this.yi = localStorage.yi.split(',')
+            }
+            if (localStorage.qu) {
+                this.qu = localStorage.qu.split(',')
+            }
+        },
+        methods: {
+            //添加
+            tian() {
+                this.wei.push(this.val)
+                this.val = ''
+                this.baocun()
+            },
+            //选中
+            xuan(val, index) {
+                this.yi.push(val)
+                this.wei.splice(index, 1)
+                this.baocun()
+                
+                var date = new Date()
+                var year = date.getFullYear()
+                var mouth = date.getMonth() + 1
+                var days = date.getDate()
+                var hour = date.getHours()
+                var min = date.getMinutes()
+                var s = date.getSeconds()
+                var timer = year + "-" + mouth + "-" + days + "   " + hour + ":" + min + ":" + s
+                console.log(this.time)
+            },
+            //不选
+            buxuan(val, index) {
+                this.wei.push(val)
+                this.yi.splice(index, 1)
+                this.baocun()
+            },
+            //取消
+            quxiao(evt, val, index) {
+                this.qu.push(val)
+                this.wei.splice(index, 1)
+                this.baocun()
+            },
+            //恢复
+            hui(evt, val, index) {
+                this.wei.push(val)
+                this.qu.splice(index, 1)
+                this.baocun()
+            },
+            baocun() {
+                localStorage.wei = this.wei
+                localStorage.yi = this.yi
+                localStorage.qu = this.qu
+            },
+        },
+    })
+
+</script>
+
+</html>

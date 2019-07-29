@@ -1,0 +1,20 @@
+*{
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.content{
+	width: 40%;
+	margin: 0 auto;
+}
+.f-r{
+	float: right;
+}
+li{
+	margin: 10px 0;
+}
+.title{
+	height: 40px;
+	line-height: 40px;
+	background: aqua;
+}
