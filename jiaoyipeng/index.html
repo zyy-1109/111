@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+        *{list-style-type: none;margin: 0;padding: 0;}
+        #box {
+
+            width: 800px;
+            height: 500px;
+            margin: 50px auto;
+        }
+        .form-control{
+            float: left;
+            width: 80%;
+            /* padding: 30px 90px 30px 0; */
+            box-sizing: border-box;
+        }
+        .event-add {
+            padding: 30px 90px 30px 0;
+        }
+        h2{
+            background-color: #26b6be;
+            height: 44px;
+            line-height: 44px;
+            color: #fff;
+            cursor: pointer;
+            padding-left: 20px;
+            margin: 0;
+            font-size: 14px;
+            border-bottom:1px solid #fff;
+            
+        }
+        .span {
+            width: 50%;font-size: 16px;color: #000;line-height: 20px;padding-left: 30px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="box">
+        <div class="event-add">
+            <input type="text" v-model="inp" class="form-control" type="text" placeholder="待办事项"><button @click="establish" class="btn">创建</button>
+        </div>
+        <div>
+            <div>  
+                <h2>未完成 <span class="glyphicon glyphicon-menu-right"></span></h2>
+                <div v-for="(i,$index) in arr"  style="overflow: hidden;margin-bottom: 10px;line-height: 40px;">
+                    <input type="checkbox" @change="input($event,i,$index)">
+                    <span class="span">{{i}}</span> 
+                    <button @click="quxiao(i,$index)" class="btn" style="float:right">取消</button>
+                </div>
+            </div>
+        </div>
+        <div>
+          
+            <div>
+                <h2>已完成</h2>
+                <div v-for="i,index in ywcarr" style="overflow: hidden;margin-bottom: 10px;">
+                    <input type="checkbox" checked="checked" @click="incon($event,i,index)">
+                     <span class="span">{{i}}</span>
+                     <span style="float:right">2019-7-26</span>
+                    </div>
+            </div>
+        </div>
+        <div>
+            <div>
+                <h2>已取消</h2>
+                <div v-for="i,index in qxarr" style="overflow: hidden;margin-bottom: 10px;"> 
+                    <input type="checkbox">
+                    <span class="span">{{i}} </span>
+                    <button @click="recover(i,index)" style="float:right" class="btn">恢复</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="vue.js"></script>
+    <script src="vue-resource.js"></script>
+    <script>
+        new Vue({
+            el:'#box',
+            data:{
+                inp:'',
+                arr:[],
+                ywcarr:[],
+                qxarr:[]
+            },
+            methods: {
+                establish(){
+                     this.arr.push(this.inp)
+                },
+                input(e,i,index){
+                    if(e.target.checked == true){
+                        e.target.checked = false
+                        this.arr.splice(index,1)
+                        this.ywcarr.push(this.arr[0])
+                    }
+                },
+                incon(e,i,index){
+                    if(e.target.checked ==false){
+                        e.target.checked = true
+                        this.ywcarr.splice(index,1)
+                        this.arr.push(this.ywcarr[0])
+                    }
+                },  
+                quxiao(i,index){
+                    // console.log(i,index);
+                    this.arr.splice(index,1)
+                    this.qxarr.push(this.arr[0])
+                },
+                recover(i,index){
+                    this.qxarr.splice(index,1)
+                    this.arr.push(this.qxarr[0])
+                }
+            },
+        })
+    
+    </script>
+</body>
+</html>
