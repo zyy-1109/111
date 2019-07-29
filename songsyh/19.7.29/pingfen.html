@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			#box{
+				margin: 20px;
+			}
+			#box ul li{
+				width: 40px;
+				height: 40px;
+				border-radius: 50%;
+				background: #ccc;
+				float: left;
+				list-style: none;
+				transition: all 0.5s;
+			}
+			#box ul li.active{
+				background: red;
+			}
+			#box span{
+				display: inline-block;
+				line-height: 40px;
+				margin-left: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<ul>
+				<li v-for="(i,$index) in 6" @mouseout="idx=click_idx" @mouseover="idx=$index+1" :style='{backgroundColor:idx>=$index+1?"red":"#ccc"}' @click="click_idx=$index+1" :class='{backgroundColor:click_idx>=$index+1?"active":""}'></li>
+			</ul>
+			<span>{{click_idx}}分</span>
+		</div>
+	</body>
+	<script type="text/javascript" src="vue.js"></script>
+	<script type="text/javascript">
+		new Vue({
+			el:"#box",
+			data:{
+				idx:"0",
+				click_idx:"0",
+			},
+			
+		})
+	</script>
+</html>
