@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>记事本</title>
+	<style>
+		#box{
+			width: 600px;
+			margin: 0 auto;
+			background: #ccc;
+		}
+		 h3{
+			font-size: 22px;	
+			background: cyan;
+			text-indent: 1em;
+		} 
+		ul li{
+			list-style: none;
+			background: #fff;
+		}
+		header{
+			width: 600px;
+			height: 60px;
+			background: cyan;
+			line-height: 60px;
+			text-align: center;
+			font-size: 22px;
+			font-weight: bold;
+		}
+		.sear{
+			width: 400px;
+			margin: 0 auto;
+			margin-top: 20px;
+		}
+		.int{
+			width: 350px;
+			height: 30px;
+		}
+		.tj{
+			width: 45px;
+			height: 30px;
+		}
+		.s{
+			float: right;
+			margin-right: 30px;
+		}
+		[v-cloak]{
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<div id="box" v-cloak>
+		<header>记事本<span class="s">三</span></header>
+		<div class="sear">
+			<input type="text" class="int" v-model="str"><button class="tj" @click="btn">提交</button>
+		</div>
+		<div class="w_box">
+			<h3>未完成</h3>
+			<ul v-for="(i,$index) in w_box" :key="$index+new Date()">
+				<li style="width: 500px; "><input type="checkbox" @change="check(i,$index)">{{i}}<span style="float: right; margin-right:50px;" @click="qx(i,$index)">取消</span></li>
+			</ul>
+		</div>
+		<div class="y_box">
+			<h3>已完成</h3>
+			<ul v-for="(i,$index) in y_box" :key="$index+new Date()">
+
+				<li style="width: 500px;"><input type="checkbox" checked @change="checkbox(i,$index)">{{i}}<span style="float: right; margin-right:50px;">{{day}}</span></li>
+			</ul>
+		</div>
+		<div class="s_box">
+			<h3>已删除</h3>
+			<ul v-for="(i,$index) in s_box" :key="$index+new Date()">
+				<li style="width: 500px; "><input type="checkbox" checked>{{i}}<span style="float: right; margin-right:50px;" @click="hf(i,$index)">恢复</span></li>
+			</ul>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="vue.js"></script>
+<script type="text/javascript" src="vue-resource.js"></script>
+<script type="text/javascript">
+	new Vue({
+		el:"#box",
+		data:{
+			str:'',
+			w_box:[],
+			y_box:[],
+			s_box:[],
+			day:'',
+		},
+		methods:{
+			btn(){
+				if(this.str==''){
+					alert('请输入')
+				}else{
+					this.w_box.push(this.str)
+				}
+			},
+			check(a,b){
+				this.w_box.splice(b,1)
+				this.y_box.push(a)
+				this.timd();
+			},
+			qx(a,b){
+				this.w_box.splice(b,1)
+				this.s_box.push(a)
+			},
+			hf(a,b){
+				this.s_box.splice(b,1)
+				this.w_box.push(a)
+			},
+			timd(){
+				var date=new Date();
+				var sp	="-";
+				var year=date.getFullYear();
+				var month=date.getMonth()+1;
+				var strDate= date.getDate();
+				this.day=year+sp+month+sp+strDate
+			},
+			checkbox(a,b){
+				this.y_box.splice(b,1)
+				this.w_box.push(a)
+			}
+		}
+	})
+</script>
+</html>

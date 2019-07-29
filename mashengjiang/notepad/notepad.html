@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="reset.css">
+	<style>
+		#box{
+			margin: 0 auto;
+			width: 80%;
+		}
+		[v-cloak]{
+			display: none;
+		}
+		.notepad{
+			line-height: 60px;
+			height: 60px;
+			background-color: cyan;
+			color: #fff;
+			font-size: 36px;
+			text-align: center;
+		}
+		.notepad span{
+			float: right;
+			padding: 0 10px;
+			box-sizing: border-box;
+		}
+		.search_box{
+			width: 80%;
+			margin: 20px auto;
+			text-align: center;
+		}
+		.search_box input{
+			width: 80%;
+			height: 40px;
+			text-indent: 2em;
+			font-size: 20px;
+			border-radius: 5px;
+		}
+		.search_box button{
+			width: 10%;
+			height: 44px;
+			border-radius: 5px;
+			background-color: cyan;
+		}
+		.search_box input,.search_box button{
+			border: 1px solid #ccc;
+			vertical-align: top;
+		}
+		.state_box div h3{
+			width: 100%;
+			height: 60px;
+			line-height: 60px;
+			color: #fff;
+			text-indent: 2em;
+			background: cyan;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			font-size: 30px;
+		}
+		ul li{
+			line-height: 40px;
+			height: 40px;
+			font-size:20px;
+			text-indent: 1em;
+			border: 1px solid #ccc;
+		}
+		li button{
+			float: right;
+			margin-right: 15px;
+			height: 30px;
+			background-color: #e0e0e0;
+			width: 60px;
+			border-radius: 5px;
+			margin-top: 5px;
+		}
+		li input{
+			width: 15px;
+			height: 15px;
+		}
+		.day{
+			float: right;
+			margin-right: 20px;
+		}
+	</style>
+</head>
+<body>
+	<div id="box" v-cloak>
+		<h3 class="notepad">记事本<span>三</span></h3>
+		<div class="search_box">
+			<input type="text" placeholder="待办事项" v-model = "str">
+			<button @click = "ready">提交</button>
+		</div>
+		<div class="state_box">
+			<div class="ready">
+			<h3>未完成</h3>
+			<ul>
+				<li v-for = "(i,$index) in readyList" :key = "$index+new Date()"><input type="checkbox" @change = "changeData($index,completeList,readyList)">{{i}}<button @click = "changeData($index,cancleList,readyList)">取消</button></li>
+			</ul>
+		</div>
+			<div class="complete">
+			<h3>已完成</h3>
+			<ul>
+				<li v-for = "(i,$index) in completeList" :key = "$index+new Date()"><input type="checkbox" checked @change = "changeData($index,readyList,completeList)">{{i}} <span class = "day">{{day}}</span></li>
+			</ul>
+		</div>
+			<div class="cancle">
+				<h3>已取消</h3>
+				<ul>
+					<li v-for = "(i,$index) in cancleList" :key = "$index+new Date()">{{i}}<button @click = "changeData($index,readyList,cancleList)">恢复</button></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+<script src="vue.js"></script>
+<script>
+	new Vue({
+		el:'#box',
+		data:{
+			str:'',
+			readyList:[],
+			completeList:[],
+			cancleList:[],
+			day:''
+		},
+		methods:{
+			ready(){
+				if (this.str == '') {
+					alert('请输入')
+					return
+				}else{
+					this.readyList.push(this.str)
+					this.str = ''
+				}
+			},
+			changeData(i,first,second){
+				first.push(second.splice(i,1).join())
+				localStorage.readyList = this.readyList
+				localStorage.completeList = this.completeList
+				localStorage.cancleList = this.cancleList
+			},
+			timd(){
+				var date = new Date();
+				var seperator1 = "-";
+				var year = date.getFullYear();
+				var month = date.getMonth() + 1;
+				var strDate = date.getDate();
+				this.day = year + seperator1 + month + seperator1 + strDate;
+			}
+		},
+		created(){
+			this.timd()
+			this.readyList = localStorage.readyList.split(',')
+			this.completeList = localStorage.completeList.split(',')
+			this.cancleList = localStorage.cancleList.split(',')
+		}
+	})
+	// 
+</script>
+</html>

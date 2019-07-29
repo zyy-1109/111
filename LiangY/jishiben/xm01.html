@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			*{margin: 0;padding: 0;}
+			[v-cloak]{
+				display: none;
+			}
+			.main{
+				min-height: 40px;
+				border-radius: 4px;
+				box-sizing: border-box;
+			}
+			.main>div{
+				height: 40px;
+				line-height: 40px;
+				text-indent: 1em;
+				margin-bottom: 2px;
+				border-radius: 4px;
+			}
+			button{
+				width: 12%;
+				height: 30px;
+				color: #fff;
+				border-radius: 3px;
+				background: dodgerblue;
+				border: none;
+				outline: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box" v-cloak>
+			
+			<header style="height: 70px;background: dodgerblue;color: #fff;font-size:30px;line-height: 70px;text-align: center;">
+					记事本
+			</header>
+			<div style="width: 60%;min-height: 600px;margin: 0 auto;box-sizing: border-box;">
+				
+				<div style="height: 60px;padding-left:4% ;padding-right: 2%;box-sizing: border-box;line-height:60px;">
+					<input type="text" style="width: 80%;height: 30px;margin-right: 2%;text-indent: 2em;" v-model="name"/><button @click="btn()">提交</button>
+				</div>
+				<div>
+					<div class="main">
+						<div style="background: dodgerblue;color: #fff;">未完成</div>
+						<div v-for="i,index in list" :key="index+i">
+							<input type="checkbox" @change="finish(index)"> {{i}}  <button style="float: right;margin-right: 6px;margin-top: 2px;" @click="quxiao(index)">取消</button>
+						</div>
+					</div>
+					
+					<div class="main">
+						<div style="background: dodgerblue;color: #fff;">已完成</div>
+						<div v-for="i,index in wan" :key="index+i">
+							<input type="checkbox" @change="change(index)" checked> {{i}} <span style="float: right;">{{time}}</span>
+						</div>
+					</div>
+					
+					<div class="main">
+						<div style="background: dodgerblue;color: #fff;">已取消</div>
+						<div v-for="i,index in qu">
+							<s>{{i}}</s>   <button style="float: right;margin-right: 6px;margin-top: 2px;" @click="back(index)">取消</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</body>
+	
+	<script type="text/javascript" src="jquery.js" ></script>
+	<script type="text/javascript" src="vue.js" ></script>
+	<script type="text/javascript" src="vue-resource.js" ></script>
+	<script>
+		new Vue({
+			el:'.box',
+			data:{
+				name:'',
+				list:[],
+				wan:[],
+				qu:[],
+				
+				time:'',
+				
+				type:true
+			},
+			created(){
+				this.time=new Data()
+				console.log(this.time)
+			},
+			methods:{
+				btn(){
+					this.list.push(this.name)
+				},
+				finish(index){
+					this.wan.push(this.list.splice(index,1)[0])
+				},
+				quxiao(index){
+					this.qu.push(this.list.splice(index,1)[0])
+				},
+				back(index){
+					this.list.push(this.qu.splice(index,1)[0])
+				},
+				change(index){
+					this.list.push(this.wan.splice(index,1)[0])
+				}
+				
+			}
+		})
+	</script>
+</html>

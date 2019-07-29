@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>记事本</title>
+	<style type="text/css">
+		[v-cloak]{
+			display: none;
+		}
+		.op{
+			width: 100%;
+			background: blue;
+			color: #fff;
+			line-height: 30px;
+			
+		}
+	</style>
+</head>
+<body>
+	
+	<div id="box" v-cloak>
+		<div style="width: 500px;min-height: 500px;margin:0 auto; background: #f3f3f3;">
+			<div>
+				<input type="text" placeholder="代办事项" v-model="text">
+				<button @click="weiy">提交</button>
+			</div>
+			<div>
+				<p class="op">未完成</p>
+				<div v-for="(i,$index) in weiwan">
+					<p><input type="checkbox" @click="gou($index)" v-bind:key="i">{{i}}<button style="float: right;" @click="shanchu($index)">删除</button></p>
+					
+				</div>
+				
+			</div>
+			<div>
+				<p class="op" >已完成</p>
+				<div v-for="(i,$index) in yiwan"  style="background-color: #fff;line-height: 30px;">
+					<p><input type="checkbox" checked="checked" @click="huigou($index)" v-bind:key="i">{{i}} </p>
+					
+				</div>
+			</div>
+			<div>
+				<p class="op">已取消</p>
+				<div v-for="(j,$index) in yiqu">
+					<p style="text-decoration: line-through; color: #ccc;">{{j}}<button @click="hui($index)" style="float: right;">回复数据 </button></p>
+					
+				</div>
+			</div>
+		</div>
+		
+
+
+
+	</div>
+
+</body>
+<script type="text/javascript" src="vue.js"></script>
+<script type="text/javascript">
+	new Vue({
+		el:'#box',
+		data:{
+			text:'',
+			yiwan:[],
+			weiwan:[],
+			yiqu:[]
+		},
+		methods:{
+			weiy(index){
+				this.weiwan.push(this.text)	
+
+			},
+			gou(index){
+				this.yiwan.push(this.weiwan[index])
+				this.weiwan.splice(index,1)
+			},
+			huigou(index){
+				this.weiwan.push(this.yiwan[index])
+				this.yiwan.splice(index,1)
+			},
+			shanchu(index){
+				this.yiqu.push(this.weiwan[index])
+				this.weiwan.splice(index,1)
+				console.log(this.yiqu)
+				
+			},
+			hui(index){
+				this.yiwan.push(this.yiqu[index])
+				this.yiqu.splice(index,1)
+			}
+		},
+	})
+
+
+
+</script>
+</html>
