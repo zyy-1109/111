@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/resat.css">
+	<script src="js/vue.js"></script>
+	<script>
+		onload = onresize = ()=>document.documentElement.style.fontSize = document.documentElement.clientWidth/640*100+'px'
+	</script>
+	<style>
+		[v-cloak]{
+			display: none;
+		}
+		.box {
+			width:6.4rem;
+			font-size: .12rem;
+		}
+		.box > div {
+			margin-bottom: .2rem;
+		}
+		.header	{
+			width: 100%;
+			height: 1rem;
+			background-color:#6495ED;
+			color: white;
+			line-height: 1rem;
+			font-size: .2rem;
+			text-align: center;
+		}
+		.tijiao {
+			width: 100%;
+			height: .6rem;
+			line-height: .6rem;
+			font-size: 0;
+			text-align: center;
+		}
+		.tijiao input {
+			width: 70%;
+			height: 100%;
+			font-size: .2rem;
+			margin-right: .2rem;
+			text-align: center;
+		}
+		.tijiao button {
+			width: 15%;
+			background: #6495ED;
+			font-size: .2rem;
+			height: 100%;
+		}
+		.content {
+			width: 100%;
+			margin-bottom: .2rem;
+		}
+		.footer {
+			width: 100%;
+			height: 1rem;
+			text-align: center;
+			line-height: 1rem;
+		}
+		.content h3 {
+			text-align: center;
+			line-height: .5rem;
+			font-size: .22rem;
+			background: #6495ed;
+			color: white;
+		}
+
+		.content > div > div {
+			box-sizing: border-box;
+			padding-left: .2rem;
+			padding-right: .2rem;
+			line-height: .4rem;
+			/* font-size: 0; */
+		}
+
+		.content > div > div > input {
+			width: .2rem;
+			height: .2rem;
+			margin-top: .1rem;
+			margin-bottom: .1rem;
+			line-height: .4rem;
+			font-size: .12rem;
+			margin-right: .3rem;
+		}
+		.content > div > div > button, .content > div > div > i {
+			width: .6rem;
+			line-height: .2rem;
+			height: .2rem;
+			margin-top: .1rem;
+			float:right;
+			font-size: .12rem;
+		}
+	</style>
+</head>
+<body>
+	<div class="box" v-cloak>
+		<div class="header">记事本</div>
+		<div class="tijiao">
+			<input type="text" placeholder="代办事项" v-model="text">
+			<button @click='tijiao()'>提交</button><br>
+		</div>
+		<div class="content">
+			<!-- 未完成 -->
+			<div class="wwc">
+				<h3>未完成</h3>
+				<div v-if='wwc' v-for='(i,$index) in wwc' :key='i+new Date()'><input type="checkbox" @click="chuqu($index,ywc,wwc)"> <span>{{i}}</span> <button @click="chuqu($index,yqx,wwc)">取消</button></div>
+			</div>
+			<!-- 已完成 -->
+			<div class="ywc">
+				<h3>已完成</h3>
+				<div v-if='ywc' v-for='(i,$index) in ywc' :key='i+new Date()'><input type="checkbox" @click="chuqu($index,wwc,ywc)" checked> <span>{{i}}</span> <i>{{year}}</i></div>
+			</div>
+			<!-- 已取消 -->
+			<div class="yqx">
+				<h3>已取消</h3>
+				<div v-if='yqx' v-for='(i,$index) in yqx' :key='i+new Date()'><span>{{i}}</span><button @click="chuqu($index,wwc,yqx)">恢复</button></div>
+			</div>
+		</div>
+		<div class="footer">
+			------------------- 这是分割线 -------------------
+		</div>
+	</div>
+</body>
+<script>
+	var date = new Date()
+	
+	new Vue({
+		el:'.box',
+		data:{
+			text:'',
+			wwc:[],
+			ywc:[],
+			yqx:[],
+			year:''
+		},
+		created() {
+			this.json = JSON.parse(localStorage.data)
+		},
+		methods: {
+			tijiao(){
+				if(this.text==""||this.text==" "){
+					alert('请输入内容')
+					return
+				}
+				this.year = date.getFullYear()+'/'+(date.getMonth()+1)+'/'+date.getDate() 
+				this.wwc.push(this.text)
+				this.text=''
+			},
+			//index:下标  dom:往谁里面添加 dom2: 要删除谁
+			chuqu(index,dom,dom1){
+				dom.push(dom1.splice(index,1).join())
+			}
+		},
+	})
+</script>
+</html>
