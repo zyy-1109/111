@@ -216,8 +216,8 @@
         <div class="huifu">
             <h3>恢复</h3>
             <ul>
-                <li style="vertical-align: middle;padding-right: 20px;padding-top: 10px;padding-left: 20px;" v-for="(item,index) in huif" :key="index">
-                    <input type="checkbox">
+                <li style="vertical-align: middle;padding-right: 20px;padding-top: 10px;padding-left: 20px;"
+                    v-for="(item,index) in huif" :key="index">
                     {{item}}
                     <span v-show="isshow" @click="huifu(item,index)" class="fr glyphicon glyphicon-triangle-top show"
                         style="line-height:30px;padding-right: 20px;vertical-align: middle;"></span>
@@ -279,8 +279,8 @@
                 console.log(1)
                 // this.ischecked = !this.ischecked;
                 // if (this.ischecked == false) {
-                    this.doneList.splice(index, 1);
-                    this.list.push(item);
+                this.doneList.splice(index, 1);
+                this.list.push(item);
                 // }
 
             },
