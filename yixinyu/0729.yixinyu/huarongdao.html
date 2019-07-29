@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		html,body,div{
+		    margin: 0;
+		    padding: 0;
+		}
+		#box{
+		    width: 400px;
+		    height: 400px;
+		    margin: 200px auto;
+		    /*background-color: #ccc;*/
+		    text-align: center;
+		}
+		.list{
+		    width: 400px;
+		    list-style: none;
+		    overflow: hidden;
+		    position: absolute;
+		     top: 250px;
+		}
+		.list1{
+		    width: 300px;
+		    list-style: none;
+		    overflow: hidden;
+		    position: absolute;
+		    top: 250px;
+		}
+		.list2{
+		    width: 500px;
+		    list-style: none;
+		    overflow: hidden;
+		    position: absolute;
+		     top: 250px;
+		}
+		.list3{
+		    width: 600px;
+		    list-style: none;
+		    overflow: hidden;
+		    position: absolute;
+		     top: 250px;
+		}
+		li{
+		    width: 100px;
+		    height: 100px;
+		    background: lightblue;
+		    float: left;
+		    line-height: 100px;
+		    color: white;
+		    font-size: 48px;
+		    border: 1px solid #ccc;
+		    box-sizing: border-box;
+		}
+		[v-cloak]{
+			display:none;
+		}
+	</style>
+</head>
+<body>
+	
+	<div id="box" v-cloak>
+		<ul class="list1" v-show="!type3">
+	        <li v-for="(num,$index) in nList1" @click="start1($index)">
+	         {{num}}
+	        </li>
+	        <button v-on:click="btn1">重新开始</button>
+	    </ul>
+	    <ul class="list" v-show="type4">
+	        <li v-for="(num,$index) in nList" @click="start($index)">
+	         {{num}}
+	        </li>
+	        <button v-on:click="btn">重新开始</button>
+	    </ul>
+	    <ul class="list2" v-show="type5">
+	        <li v-for="(num,$index) in nList2" @click="start2($index)">
+	         {{num}}
+	        </li>
+	        <button v-on:click="btn2">重新开始</button>
+	    </ul>
+	    <ul class="list3" v-show="type6">
+	        <li v-for="(num,$index) in nList3" @click="start3($index)">
+	         {{num}}
+	        </li>
+	        <button v-on:click="btn3">重新开始</button>
+	    </ul>
+	    <div style="margin-top: -10px;">
+	    	<button @click="type3=!type3">3*3</button>
+		    <button @click="type4=!type4">4*4</button>
+		    <button @click="type5=!type5">5*5</button>
+		    <button @click="type6=!type6">6*6</button>
+		    <button @click="action">开始游戏</button>
+
+		    <span>剩余:{{count}}秒</span>
+	    </div>
+	    
+	
+	</div>
+</body>
+<script src="vue.js"></script>
+
+<script>
+	
+	let vm = new Vue({
+        el:"#box",
+        data:{
+        	type3:false,
+        	type4:false,
+        	type5:false,
+        	type6:false,
+        	show: true,
+		   count: 60,
+		   timer: null,
+            nList:[],
+            nList1:[],
+            nList2:[],
+            nList3:[],
+        },
+        mounted(){
+            this.btn();
+            this.btn1();
+            this.btn2();
+            this.btn3();
+        },
+        methods:{
+        	action(){
+			     const TIME_COUNT = 60;
+			     if (!this.timer) {
+			       this.count = TIME_COUNT;
+			       this.show = false;
+			       this.timer = setInterval(() => {
+			       if (this.count > 0 && this.count <= TIME_COUNT) {
+			         this.count--;
+			        } else {
+			         this.show = true;
+			         clearInterval(this.timer);
+			         this.timer = null;
+			         alert('时间到')
+			        }
+			       }, 1000)
+			      } 
+        	},
+            btn(){
+	            let arr = [];
+	            for(let i=0;arr.length<15;i++){
+	                let num = Math.ceil(Math.random()*15)
+	                if(arr.indexOf(num)==-1){
+	                    arr.push(num)
+	                }
+	            }
+	            this.nList=arr;
+	            this.nList.push("");
+            },
+            btn1(){
+	            let arr1 = [];
+	            for(let i=0;arr1.length<8;i++){
+	                let num = Math.ceil(Math.random()*8)
+	                if(arr1.indexOf(num)==-1){
+	                    arr1.push(num)
+	                }
+	            }
+	            this.nList1=arr1;
+	            this.nList1.push("");
+            },
+            btn2(){
+	            let arr2 = [];
+	            for(let i=0;arr2.length<24;i++){
+	                let num = Math.ceil(Math.random()*24)
+	                if(arr2.indexOf(num)==-1){
+	                    arr2.push(num)
+	                }
+	            }
+	            this.nList2=arr2;
+	            this.nList2.push("");
+            },
+            btn3(){
+	            let arr3 = [];
+	            for(let i=0;arr3.length<35;i++){
+	                let num = Math.ceil(Math.random()*35)
+	                if(arr3.indexOf(num)==-1){
+	                    arr3.push(num)
+	                }
+	            }
+	            this.nList3=arr3;
+	            this.nList3.push("");
+            },
+            start(i){
+                let currentNum = this.nList[i],
+                leftNum = this.nList[i-1],
+                rigthNum = this.nList[i+1],
+                topNum = this.nList[i-4],
+                buttonNum=this.nList[i+4];
+                if(rigthNum===""){
+                    Vue.set(this.nList,i+1,currentNum);
+                    Vue.set(this.nList,i,"");
+                }else if(leftNum===""){
+                    Vue.set(this.nList,i-1,currentNum);
+                    Vue.set(this.nList,i,"");
+                }else if(topNum===""){
+                    Vue.set(this.nList,i-4,currentNum);
+                    Vue.set(this.nList,i,"");
+                }else if(buttonNum===""){
+                    Vue.set(this.nList,i+4,currentNum);
+                    Vue.set(this.nList,i,"");
+                }
+ 
+                if(this.jieshu()){
+                    alert('success!')
+                }
+ 
+            },
+            start1(j){
+                let currentNum = this.nList1[j],
+                leftNum = this.nList1[j-1],
+                rigthNum = this.nList1[j+1],
+                topNum = this.nList1[j-3],
+                buttonNum=this.nList1[j+3];
+                if(rigthNum===""){
+                    Vue.set(this.nList1,j+1,currentNum);
+                    Vue.set(this.nList1,j,"");
+                }else if(leftNum===""){
+                    Vue.set(this.nList1,j-1,currentNum);
+                    Vue.set(this.nList1,j,"");
+                }else if(topNum===""){
+                    Vue.set(this.nList1,j-3,currentNum);
+                    Vue.set(this.nList1,j,"");
+                }else if(buttonNum===""){
+                    Vue.set(this.nList1,j+3,currentNum);
+                    Vue.set(this.nList1,j,"");
+                }
+ 
+                if(this.jieshu1()){
+                    alert('success!')
+                }
+ 
+            },
+            start2(a){
+                let currentNum = this.nList2[a],
+                leftNum = this.nList2[a-1],
+                rigthNum = this.nList2[a+1],
+                topNum = this.nList2[a-5],
+                buttonNum=this.nList2[a+5];
+                if(rigthNum===""){
+                    Vue.set(this.nList2,a+1,currentNum);
+                    Vue.set(this.nList2,a,"");
+                }else if(leftNum===""){
+                    Vue.set(this.nList2,a-1,currentNum);
+                    Vue.set(this.nList2,a,"");
+                }else if(topNum===""){
+                    Vue.set(this.nList2,a-5,currentNum);
+                    Vue.set(this.nList2,a,"");
+                }else if(buttonNum===""){
+                    Vue.set(this.nList2,a+5,currentNum);
+                    Vue.set(this.nList2,a,"");
+                }
+ 
+                if(this.jieshu2()){
+                    alert('success!')
+                }
+ 
+            },
+            start3(b){
+                let currentNum = this.nList3[b],
+                leftNum = this.nList3[b-1],
+                rigthNum = this.nList3[b+1],
+                topNum = this.nList3[b-6],
+                buttonNum=this.nList3[b+6];
+                if(rigthNum===""){
+                    Vue.set(this.nList3,b+1,currentNum);
+                    Vue.set(this.nList3,b,"");
+                }else if(leftNum===""){
+                    Vue.set(this.nList3,b-1,currentNum);
+                    Vue.set(this.nList3,b,"");
+                }else if(topNum===""){
+                    Vue.set(this.nList3,b-6,currentNum);
+                    Vue.set(this.nList3,b,"");
+                }else if(buttonNum===""){
+                    Vue.set(this.nList3,b+6,currentNum);
+                    Vue.set(this.nList3,b,"");
+                }
+ 
+                if(this.jieshu3()){
+                    alert('success!')
+                }
+ 
+            },
+            jieshu(){
+                let i = 0;l=this.nList.length;
+                for(i;i<l-2;i++){
+                    if(this.nList[0]===""||this.nList[l-1]===""){
+                        if(this.nList[i]<this.nList[i+1]){
+ 
+                        }else{
+                            return false;
+                        }
+                    }else{
+                        return false;
+                    }
+                }
+                return true;
+            },
+            jieshu1(){
+                let i = 0;l=this.nList1.length;
+                for(i;i<l-2;i++){
+                    if(this.nList1[0]===""||this.nList1[l-1]===""){
+                        if(this.nList1[i]<this.nList1[i+1]){
+ 
+                        }else{
+                            return false;
+                        }
+                    }else{
+                        return false;
+                    }
+                }
+                return true;
+            },
+            jieshu2(){
+                let i = 0;l=this.nList2.length;
+                for(i;i<l-2;i++){
+                    if(this.nList2[0]===""||this.nList2[l-1]===""){
+                        if(this.nList2[i]<this.nList2[i+1]){
+ 
+                        }else{
+                            return false;
+                        }
+                    }else{
+                        return false;
+                    }
+                }
+                return true;
+            },
+            jieshu3(){
+                let i = 0;l=this.nList3.length;
+                for(i;i<l-2;i++){
+                    if(this.nList3[0]===""||this.nList3[l-1]===""){
+                        if(this.nList3[i]<this.nList3[i+1]){
+ 
+                        }else{
+                            return false;
+                        }
+                    }else{
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+    })
+
+</script>
+</html>
