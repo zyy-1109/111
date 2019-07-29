@@ -54,10 +54,10 @@
                 <!-- 未完成 -->
                 <div class="ywc">
                     <h3 class="a">未完成</h3>
-                    <ul class="item" >
+                    <ul class="item">
                         <li style="line-height:40px;border-bottom:solid cornflowerblue 1px;"
                             v-for="(item, index) in list">
-                            <input type="checkbox" @change="clickMe" v-model="ckeckVal" />
+                            <input type="checkbox" v-model="ckeckVal" @change="checkOk(item,index)" />
                             {{item}}
                             <button style="float: right;" @click="finish(item,index)">取消</button>
                         </li>
@@ -67,19 +67,17 @@
                 <div class="wwc">
                     <h3 class="a">已完成</h3>
                     <ul>
-
-                        <li v-for="(item, index) in fd">
-                            <!-- <input type="checkbox" /> -->
-
+                        <li v-for="(item, index) in okList" :key="index+item">
+                            <input type="checkbox" @change="back(item,index)" checked="true"/>
+                            {{item}}
                         </li>
                     </ul>
-
                 </div>
                 <!--  -->
                 <div class="yqx">
                     <h3 class="a">已取消</h3>
                     <ul>
-                        <li v-for="(item, index) in finishlist">
+                        <li v-for="(item, index) in finishlist" style="overflow:hidden">
                             <s>
                                 {{item}}
                             </s>
@@ -89,11 +87,7 @@
 
                 </div>
             </div>
-
-
         </div>
-
-
     </div>
 </body>
 <script type="text/javascript" src="vue.js"></script>
@@ -106,10 +100,8 @@
             list: [],
             finishlist: [],
             fs: [],
-            ckeckVal:false,
-            ckeckClass:'',
-            ckeckInfo:'复选框没有被选中',
-            fd:[]
+            check: false,
+            okList: [],
 
         },
         methods: {
@@ -119,7 +111,6 @@
                 } else {
                     this.list.push(this.tianjia)
                     this.tianjia = ''
-
                 }
             },
             finish(item, index) {
@@ -131,16 +122,17 @@
                 this.list.push(item)
                 // console.log(this.fs)
             },
-            clickMe(item,index) {
-                var that = this;
-                if (that.ckeckVal) {
-                   alert('复选框被选中了');
-                   that.list.splice(index, 1)
-                    that.fd.push(item)
-                    console.log(that.fd)
-                  
-                } 
-            }
+            checkOk(item, index) {
+                if (this.check.checkbox = true) {
+                    console.log(this.check)
+                    this.list.splice(index, 1);
+                    this.okList.unshift(item); 
+                }
+            },
+            back(item, index) {
+                this.okList.splice(index, 1);
+                this.list.push(item);
+            },
 
         },
 
