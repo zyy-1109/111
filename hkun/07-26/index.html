@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>记事本</title>
+		<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+		 crossorigin="anonymous">
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			h1 {
+				line-height: 60px;
+				background-color: deepskyblue;
+				color: white;
+				text-align: center;
+				margin: 0;
+			}
+
+			ul {
+				width: 100%;
+				min-height: 60px;
+				margin: 0;
+			}
+
+			ul li {
+				line-height: 60px;
+			}
+
+			ul li:first-of-type {
+				background-color: deepskyblue;
+				padding-left: 15px;
+				color: white;
+				font-weight: 600;
+			}
+
+			[v-cloak] {
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box" v-cloak>
+			<h1>记事本</h1>
+			<div class="form-group" style="padding-top: 30px;">
+				<input style="width: 70%;float: left;margin-right: 10px;" type="email" class="form-control" id="exampleInputEmail1"
+				 placeholder="待办事项" v-model="int" @keyup.enter="add_btn()">
+				<button type="button" class="btn btn-info" @click="add_btn()">提交</button>
+			</div>
+			<ul>
+				<li>未完成</li>
+				<li v-if="data_arr.length" v-for="(i,$index) in data_arr" :key='$index+new Date()'>
+					<input type="checkbox" style="width: 20px;height: 20px;" @change="ok_btn(i,$event,$index)">
+					<span style="display: inline-block;width: 80%;">{{i}}</span>
+					<button type="button" class="btn btn-info" @click="rm_btn(i,$index)">取消</button>
+				</li>
+			</ul>
+			<ul>
+				<li>已完成</li>
+				<li v-if="ok_arr.length" v-for="(i,$index) in ok_arr" :key='$index+new Date()'>
+					<input type="checkbox" style="width: 20px;height: 20px;" checked @change="ok_btn(i,$event,$index)">
+					<span style="display: inline-block;width: 80%;">{{i}}</span>
+					<!-- <button type="button" class="btn btn-info">取消</button> -->
+					<span>2019-07-26</span>
+				</li>
+			</ul>
+			<ul>
+				<li>已取消</li>
+				<li v-if="no_arr.length" v-for="(i,$index) in no_arr" :key='$index+new Date()'>
+					<span style="display: inline-block;width: 80%;">{{i}}</span>
+					<button type="button" class="btn btn-info" @click="hf_arr(i, $index)">恢复</button>
+				</li>
+			</ul>
+		</div>
+	</body>
+	<script src="../vue.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+	
+		new Vue({
+			el: '#box',
+			data: {
+				int: '',
+				data_arr: [],
+				ok_arr: [],
+				no_arr: []
+			},
+			created() {
+				if (localStorage.ok) {
+					this.ok_arr = localStorage.ok.split(',')
+				}
+				if (localStorage.data) {
+					this.data_arr = localStorage.data.split(',')
+				}
+				if (localStorage.no) {
+					this.no_arr = localStorage.no.split(',')
+				}
+			},
+			methods: {
+				cs_arr() {
+					localStorage.ok = this.ok_arr
+					localStorage.data = this.data_arr
+					localStorage.no = this.no_arr
+				},
+				hf_arr(i, index) {
+					this.no_arr.splice(index, 1)
+					this.data_arr.push(i)
+					this.cs_arr()
+				},
+				rm_btn(i, index) {
+					this.data_arr.splice(index, 1)
+					this.no_arr.push(i)
+					this.cs_arr()
+				},
+				ok_btn(i, evt, index) {
+					if (evt.path[0].checked == true) {
+						this.data_arr.splice(index, 1)
+						this.ok_arr.push(i)
+						this.cs_arr()
+					} 
+					if (evt.path[0].checked == false) {
+						this.ok_arr.splice(index, 1)
+						this.data_arr.push(i)
+						this.cs_arr()
+					}
+				},
+				add_btn() {
+					if (this.int != '') {
+						this.data_arr.push(this.int)
+						this.int = ''
+						this.cs_arr()
+					} else {
+						alert('请输入')
+					}
+				}
+			}
+		})
+	</script>
+</html>

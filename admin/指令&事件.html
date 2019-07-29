@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        {{num}}
+        <input type="text" v-model.lazy='num'>
+        <div @click.capture.stop='alert(1)'>
+            <p @click='alert(2)'>点击1</p>
+        </div>
+
+        <div @click='alert(1)'>
+            <div @click.stop='alert(2)'>
+                <p @click='alert(3)'>点击2</p>
+            </div>
+        </div>
+
+        <div @click='alert(1)'>
+            <div @click.capture='alert(2)'>
+                <p @click.self='alert(3)'>点击3</p>
+            </div>
+        </div>
+    </div>
+    <script>
+    var vm = new Vue({
+	    el:'#app',  //挂载点
+	    data:{
+            abc:'hello',
+            num:0,
+        },
+	    methods:{
+            alert(num){
+              alert(num)
+            }
+        }
+    })
+    // document.getElementById('abc').addEventListener('click',function(event){
+    //     console.log(event.target);
+    // event.stopPropagation()
+    //     // event.target
+    // },true)
+    // document.getElementById('abc').addEventListener('click',function(){
+    //     alert(1)
+    // },false)
+
+    
+    // vm.$set
+    // vm.$http
+    // axios  vue-resource
+
+
+// vue事件
+//  $event -> 事件对象
+//  如果说方法里没有其他参数、方法第一个参数就是$event
+//  如果有其他参数，并且你需要使用$event对象，需要在调用方法是传递$event
+
+// v-on:click.stop.self='change($event,1)'
+
+//  stop  ==  event.StopPropagation()
+//  prevent == event.preventDetault()
+//  capture   == addEventListener的第三个参数为true
+//  self   ===  事件捕获的目标源  == event.target
+//  once  ===  只执行一次监听事件，执行完以后 removeEventlistener
+//  passive =   一般会用到 window.onscroll
+
+//  :之前的叫指令名字
+//  :之后的叫指令参数
+//  .之后的指令的修饰符    修饰指令参数的
+
+// attachEvent() 之后采用冒泡形式来执行监听 ， 有点类似于addEventListener的第三个参数为false
+
+    </script>
+</body>
+</html>
