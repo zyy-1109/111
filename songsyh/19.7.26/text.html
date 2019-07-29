@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				padding: 0;
+				margin: 0;
+				border: none;
+				background: none;
+				outline: none;
+				list-style: none;
+			}
+			#box{
+				width: 600px;
+				height: auto;
+				/*margin: 0 auto;*/
+			}
+			.header{
+				line-height: 60px;
+				background: dodgerblue;
+				text-align: center;
+				color: #fff;
+			}
+			.nav{
+				padding: 20px 10px;
+				overflow: hidden;
+			}
+			.nav input{
+				width: 480px;
+				height: 40px;
+				border: 1px solid #ccc;
+				border-radius: 6px;
+				float: left;
+				text-indent: 16px;
+			}
+			.nav button{
+				width: 80px;
+				height: 40px;
+				background: dodgerblue;
+				border-radius: 6px;
+				float: right;
+			}
+			.content{
+				padding: 0 10px;
+			}
+			.content>div h4{
+				line-height: 40px;
+				background: dodgerblue;
+				color: #fff;
+				padding: 0 5px;
+			}
+			.content>div ul li{
+				line-height: 50px;
+				font-size: 16px;
+			}
+			.content>div ul li span{
+				float: right;
+			}
+			.content>div ul li button{
+				float: right;
+				background: dodgerblue;
+				color: #fff;
+				padding: 10px;
+				margin: 5px;
+			}
+			[v-cloak]{
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box" v-cloak>
+			<div class="header">
+				<h2>记事本</h2>
+				<span></span>
+			</div>
+			<div class="nav">
+				<input type="text" placeholder="待办事项" v-model="txt"/><button @click="btn">提交</button>
+			</div>
+			<div class="content">
+				<div>
+					<h4>未完成</h4>
+					<ul>
+						<li v-if="n_comp" v-for="(i,$index) in n_comp" :key="$index+new Date()+i"><input type="checkbox" :key="$index" @change="y_camp($index)" :value="$index"/>{{i}}<button @click="cancel($index)">取消</button></li>
+					</ul>
+				</div>
+				<div>
+					<h4>已完成</h4>
+					<ul>
+						<li v-if="y_comp" v-for="(i,$index) in y_comp" :key="$index+new Date()+i"><input type="checkbox" checked="true" @change="n_camp($index)" />{{i}}<span>2019-7-26</span></li>
+					</ul>
+				</div>
+				<div>
+					<h4>已取消</h4>
+					<ul>
+						<li v-if="cancell" v-for="(i,$index) in cancell" :key="$index+new Date()+i">{{i}}<button @click="resume($index)">恢复</button></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="vue.js"></script>
+	<script type="text/javascript">
+		new Vue({
+			el:"#box",
+			data:{
+				txt:"",
+				n_comp:[],
+				y_comp:[],
+				cancell:[], 
+			},
+			created(){
+				
+				if(localStorage.n_comp){
+					console.log(localStorage.n_comp)
+					this.n_comp=localStorage.n_comp.split(",")
+				}
+				if(localStorage.y_comp){
+					this.y_comp=localStorage.y_comp.split(",")
+				}
+				if(localStorage.cancell){
+					this.cancell=localStorage.cancell.split(",")
+				}
+			},
+			methods:{
+				//创建
+				btn(){
+					if(this.txt==""){
+						alert("请输入内容")
+					}else{
+						this.n_comp.push(this.txt)
+						localStorage.n_comp=this.n_comp
+					}
+				},
+				//已完成
+				y_camp(idx){
+					this.y_comp.push(this.n_comp.splice(idx,1)[0])
+					localStorage.n_comp=this.n_comp
+					localStorage.y_comp=this.y_comp
+//					var date=new Date()
+//					var year=date.getFullYear()
+//					var mouth=date.getMonth()+1
+//					var days=date.getDate()
+//					var hour=date.getHours()
+//					var min=date.getMinutes()
+//					var s=date.getSeconds()
+//					this.time=year+"-"+mouth+"-"+days+" "+hour+":"+min+":"+s
+				},
+				//取消已完成
+				n_camp(idx){
+					this.n_comp.push(this.y_comp.splice(idx,1)[0])
+					localStorage.n_comp=this.n_comp
+					localStorage.y_comp=this.y_comp
+				},
+				//取消
+				cancel(idx){
+					this.cancell.push(this.n_comp.splice(idx,1)[0])
+					localStorage.n_comp=this.n_comp
+					localStorage.cancell=this.cancell
+				},
+				//恢复
+				resume(idx){
+					this.n_comp.push(this.cancell.splice(idx,1)[0])
+					localStorage.n_comp=this.n_comp
+					localStorage.cancell=this.cancell
+				}
+			},
+			
+		})
+	</script>
+</html>
