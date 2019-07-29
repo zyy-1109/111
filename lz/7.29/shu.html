@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body,
+        div {
+            margin: 0;
+            padding: 0;
+        }
+
+        #app {
+            width: 400px;
+            height: 422px;
+            margin: 200px auto;
+            background-color: black;
+            text-align: center;
+            color: white;
+        }
+
+        .puzzle {
+            width: 400px;
+            list-style: none;
+            overflow: hidden;
+            margin-left: -40px;
+            margin-bottom: 0px;
+            margin-top: -23px;
+        }
+
+        li {
+            width: 100px;
+            height: 100px;
+            background: orange;
+            float: left;
+            line-height: 100px;
+            -webkit-text-stroke: 1px #fff;
+            color: transparent;
+            font-size: 48px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        .puzzle-empty {
+            background: #ccc;
+            box-shadow: 0px 0px 2px #000 inset;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <ul class="puzzle">
+            <li :class="{'puzzle-item':true,'puzzle-empty':!num}" v-for="(num,index) in numLists"
+                @click="moveTo(index)">
+                {{num}}
+            </li>
+        </ul>
+        <button v-on:click="rander">重新开始</button>
+    </div>
+</body>
+<script src="../vue.js"></script>
+<script>
+    let vm = new Vue({
+        el: "#app",
+        data: {
+            numLists: []
+        },
+        mounted() {
+            this.rander();
+        },
+        methods: {
+            rander() {
+                let arr = [];
+                for (let i = 0; arr.length < 15; i++) {
+                    let num = Math.ceil(Math.random() * 15)
+                    if (arr.indexOf(num) == -1) {
+                        arr.push(num)
+                    }
+                }
+                this.numLists = arr;
+                this.numLists.push("");
+            },
+            moveTo(i) {
+                let currentNum = this.numLists[i],
+                    leftNum = this.numLists[i - 1],
+                    rigthNum = this.numLists[i + 1],
+                    topNum = this.numLists[i - 4],
+                    buttonNum = this.numLists[i + 4];
+                if (rigthNum === "") {
+                    Vue.set(this.numLists, i + 1, currentNum);
+                    Vue.set(this.numLists, i, "");
+                } else if (leftNum === "") {
+                    Vue.set(this.numLists, i - 1, currentNum);
+                    Vue.set(this.numLists, i, "");
+                } else if (topNum === "") {
+                    Vue.set(this.numLists, i - 4, currentNum);
+                    Vue.set(this.numLists, i, "");
+                } else if (buttonNum === "") {
+                    Vue.set(this.numLists, i + 4, currentNum);
+                    Vue.set(this.numLists, i, "");
+                }
+
+                if (this.endGame()) {
+                    alert('success!')
+                }
+
+            },
+            endGame() {
+                let i = 0;
+                l = this.numLists.length;
+                for (i; i < l - 2; i++) {
+                    if (this.numLists[0] === "" || this.numLists[l - 1] === "") {
+                        if (this.numLists[i] < this.numLists[i + 1]) {
+
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+    })
+</script>
+
+</html>
